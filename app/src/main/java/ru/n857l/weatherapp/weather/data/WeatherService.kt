@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.weatherscreen.data
+package ru.n857l.weatherapp.weather.data
 
 import retrofit2.Call
 import retrofit2.http.GET

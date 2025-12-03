@@ -1,0 +1,40 @@
+package ru.n857l.weatherapp.weather.domain
+
+import ru.n857l.weatherapp.findcity.domain.DomainException
+import ru.n857l.weatherapp.findcity.domain.NoInternetException
+import java.io.Serializable
+
+interface WeatherResult {
+
+    fun <T : Serializable> map(mapper: Mapper<T>): T
+
+    interface Mapper<T : Serializable> {
+
+        fun mapEmpty(): T
+
+        fun mapWeather(
+            cityName: String,
+            temperature: Float
+        ): T
+
+        fun mapNoInternetError(): T
+    }
+
+    data class Base(
+        private val weatherInCity: WeatherInCity
+    ) : WeatherResult {
+
+        override fun <T : Serializable> map(mapper: Mapper<T>): T {
+            return mapper.mapWeather(weatherInCity.cityName, weatherInCity.temperature)
+        }
+    }
+
+    data class Failed(private val error: DomainException) : WeatherResult {
+        override fun <T : Serializable> map(mapper: Mapper<T>): T {
+            return if (error is NoInternetException)
+                mapper.mapNoInternetError()
+            else
+                TODO("to be done next time maybe")
+        }
+    }
+}

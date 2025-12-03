@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.n857l.weatherapp.findcity.presentation.QueryEvent
 import javax.inject.Singleton
 
 @Module
@@ -15,7 +16,7 @@ abstract class CoreBindsModule {
 
     @Binds
     @Singleton
-    abstract fun binRunAsync(runAsync: RunAsync.Base): RunAsync
+    abstract fun binRunAsync(runAsync: RunAsync.Base): RunAsync<QueryEvent>
 }
 
 @Module

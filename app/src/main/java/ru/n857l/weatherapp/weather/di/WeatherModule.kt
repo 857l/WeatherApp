@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.weatherscreen.di
+package ru.n857l.weatherapp.weather.di
 
 import dagger.Binds
 import dagger.Module
@@ -6,10 +6,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import retrofit2.Retrofit
-import ru.n857l.weatherapp.weatherscreen.data.WeatherCacheDataSource
-import ru.n857l.weatherapp.weatherscreen.data.WeatherCloudDataSource
-import ru.n857l.weatherapp.weatherscreen.data.WeatherService
-import ru.n857l.weatherapp.weatherscreen.domain.WeatherRepository
+import ru.n857l.weatherapp.weather.data.WeatherCacheDataSource
+import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
+import ru.n857l.weatherapp.weather.data.WeatherService
+import ru.n857l.weatherapp.weather.domain.WeatherRepository
+import ru.n857l.weatherapp.weather.domain.WeatherResult
+import ru.n857l.weatherapp.weather.presentation.WeatherUi
+import ru.n857l.weatherapp.weather.presentation.WeatherUiMapper
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -32,4 +35,7 @@ abstract class WeatherBindModule {
 
     @Binds
     abstract fun bindWeatherRepository(repository: WeatherRepository.Base): WeatherRepository
+
+    @Binds
+    abstract fun bindWeatherUiMapper(mapper: WeatherUiMapper): WeatherResult.Mapper<WeatherUi>
 }
