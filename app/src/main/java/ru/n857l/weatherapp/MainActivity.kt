@@ -8,19 +8,21 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.n857l.weatherapp.findcityscreen.presentation.FindCityScreen
+import ru.n857l.weatherapp.findcityscreen.presentation.FindCityViewModel
 import ru.n857l.weatherapp.ui.theme.WeatherAppTheme
 import ru.n857l.weatherapp.weatherscreen.presentation.WeatherScreen
+import ru.n857l.weatherapp.weatherscreen.presentation.WeatherViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
