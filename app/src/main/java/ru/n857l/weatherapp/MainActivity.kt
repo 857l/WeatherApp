@@ -16,11 +16,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.n857l.weatherapp.findcityscreen.presentation.FindCityScreen
-import ru.n857l.weatherapp.findcityscreen.presentation.FindCityViewModel
+import ru.n857l.weatherapp.findcity.presentation.FindCityScreen
+import ru.n857l.weatherapp.findcity.presentation.FindCityViewModel
 import ru.n857l.weatherapp.ui.theme.WeatherAppTheme
-import ru.n857l.weatherapp.weatherscreen.presentation.WeatherScreen
-import ru.n857l.weatherapp.weatherscreen.presentation.WeatherViewModel
+import ru.n857l.weatherapp.weather.presentation.WeatherScreen
+import ru.n857l.weatherapp.weather.presentation.WeatherViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

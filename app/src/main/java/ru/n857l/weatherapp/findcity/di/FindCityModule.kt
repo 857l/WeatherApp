@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.findcityscreen.di
+package ru.n857l.weatherapp.findcity.di
 
 import dagger.Binds
 import dagger.Module
@@ -6,10 +6,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import retrofit2.Retrofit
-import ru.n857l.weatherapp.findcityscreen.data.FindCityCacheDataSource
-import ru.n857l.weatherapp.findcityscreen.data.FindCityCloudDataSource
-import ru.n857l.weatherapp.findcityscreen.data.FindCityService
-import ru.n857l.weatherapp.findcityscreen.domain.FindCityRepository
+import ru.n857l.weatherapp.findcity.data.FindCityCacheDataSource
+import ru.n857l.weatherapp.findcity.data.FindCityCloudDataSource
+import ru.n857l.weatherapp.findcity.data.FindCityService
+import ru.n857l.weatherapp.findcity.domain.FindCityRepository
+import ru.n857l.weatherapp.findcity.domain.FindCityResult
+import ru.n857l.weatherapp.findcity.presentation.FindCityUiMapper
+import ru.n857l.weatherapp.findcity.presentation.FoundCityUi
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -32,4 +35,7 @@ abstract class FindCityBindModule {
 
     @Binds
     abstract fun bindFindCityRepository(repository: FindCityRepository.Base): FindCityRepository
+
+    @Binds
+    abstract fun bindFindCityUiMapper(mapper: FindCityUiMapper): FindCityResult.Mapper<FoundCityUi>
 }

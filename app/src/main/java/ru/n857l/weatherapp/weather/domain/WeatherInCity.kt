@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.weatherscreen.domain
+package ru.n857l.weatherapp.weather.domain
 
 import java.io.Serializable
 

@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.findcityscreen.data
+package ru.n857l.weatherapp.findcity.data
 
 import android.content.Context
 import androidx.core.content.edit

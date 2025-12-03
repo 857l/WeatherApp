@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.weatherscreen.data
+package ru.n857l.weatherapp.weather.data
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
