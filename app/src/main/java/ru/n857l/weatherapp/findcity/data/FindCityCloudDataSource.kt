@@ -27,4 +27,4 @@ interface FindCityCloudDataSource {
     }
 }
 
-const val API_KEY = "2162167f0ff42eadb8f9492979a90b52"
+const val API_KEY = "a769a571ff80f294c7dcc54dbe3783a3"
