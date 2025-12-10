@@ -46,9 +46,9 @@ interface RunAsync<R : Any> {
             ui: (T) -> Unit
         ) {
             scope.launch(Dispatchers.IO) {
-                val result = background.invoke()
+                val result = background()
                 withContext(Dispatchers.Main) {
-                    ui.invoke(result)
+                    ui(result)
                 }
             }
         }
