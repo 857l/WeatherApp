@@ -7,9 +7,16 @@ data class FoundCity(
     val name: String,
     val latitude: Float,
     val longitude: Float,
-    val countryCode: String
+    private val countryCode: String,
+    private val state: String? = null
 ) : Serializable {
 
-    val countryName: String
-        get() = Locale("", countryCode).displayCountry
+    val fullCountryName: String
+        get() = buildString {
+            append(Locale("", countryCode).displayCountry)
+
+            if (state != null) {
+                append(", $state")
+            }
+        }
 }

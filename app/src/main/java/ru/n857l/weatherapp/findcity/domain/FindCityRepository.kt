@@ -25,7 +25,8 @@ interface FindCityRepository {
                         name = it.name,
                         latitude = it.latitude,
                         longitude = it.longitude,
-                        countryCode = it.countryName
+                        countryCode = it.countryName,
+                        state = it.state
                     )
                 }
                 return FindCityResult.Base(foundCities)
