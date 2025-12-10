@@ -8,7 +8,7 @@ interface FindCityResult {
 
     interface Mapper<T : Serializable> {
 
-        fun mapFoundCity(foundCity: FoundCity): T
+        fun mapFoundCity(foundCities: List<FoundCity>): T
 
         fun mapEmpty(): T
 
@@ -16,11 +16,11 @@ interface FindCityResult {
     }
 
     data class Base(
-        private val foundCity: FoundCity
+        private val foundCities: List<FoundCity>
     ) : FindCityResult {
 
         override fun <T : Serializable> map(mapper: Mapper<T>): T {
-            return mapper.mapFoundCity(foundCity)
+            return mapper.mapFoundCity(foundCities)
         }
     }
 

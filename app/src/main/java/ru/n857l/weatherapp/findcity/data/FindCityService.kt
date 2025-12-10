@@ -9,6 +9,7 @@ interface FindCityService {
     @GET("geo/1.0/direct")
     fun findCity(
         @Query("q") query: String,
+        @Query("limit") limit: Int = 20,
         @Query("appid") apiKey: String
     ): Call<List<FoundCityCloud>>
 }

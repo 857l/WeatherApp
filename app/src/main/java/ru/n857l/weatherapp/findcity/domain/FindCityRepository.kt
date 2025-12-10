@@ -15,20 +15,20 @@ interface FindCityRepository {
         private val cacheDataSource: FindCityCacheDataSource
     ) : FindCityRepository {
 
-        override suspend fun findCity(city: String): FindCityResult {
+        override suspend fun findCity(name: String): FindCityResult {
             try {
-                val foundCityCloudList = cloudDataSource.findCity(city)
+                val foundCityCloudList = cloudDataSource.findCity(name)
                 if (foundCityCloudList.isEmpty()) return FindCityResult.Empty
-                else {
-                    val foundCityCloud = foundCityCloudList.first()
-                    return FindCityResult.Base(
-                        FoundCity(
-                            name = foundCityCloud.name,
-                            latitude = foundCityCloud.latitude,
-                            longitude = foundCityCloud.longitude
-                        )
+
+                val foundCities = foundCityCloudList.map {
+                    FoundCity(
+                        name = it.name,
+                        latitude = it.latitude,
+                        longitude = it.longitude,
+                        countryCode = it.countryName
                     )
                 }
+                return FindCityResult.Base(foundCities)
             } catch (e: DomainException) {
                 return FindCityResult.Failed(e)
             }

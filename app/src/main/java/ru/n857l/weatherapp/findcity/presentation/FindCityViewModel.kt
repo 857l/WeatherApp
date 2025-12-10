@@ -23,28 +23,32 @@ class FindCityViewModel @Inject constructor(
         savedStateHandle.getStateFlow(KEY, mapper.mapEmpty())
 
     init {
-        runAsync.debounce(viewModelScope, background = { latestQuery ->
-            val query = latestQuery.value
-            if (query.isEmpty())
-                mapper.mapEmpty()
-            else {
-                savedStateHandle[KEY] = FoundCityUi.Loading
-                repository.findCity(query).map(mapper)
-            }
-        }) {
-            savedStateHandle[KEY] = it
-        }
+        runAsync.debounce(
+            scope = viewModelScope,
+            background = { latestQuery ->
+                val query = latestQuery.value.trim()
+                if (query.isEmpty())
+                    mapper.mapEmpty()
+                else {
+                    savedStateHandle[KEY] = FoundCityUi.Loading
+                    repository.findCity(query).map(mapper)
+                }
+            },
+            ui = { resultUi ->
+                savedStateHandle[KEY] = resultUi
+            })
     }
 
     fun findCity(cityName: String) {
-        runAsync.emit(value = QueryEvent(cityName.trim()))
+        runAsync.emit(QueryEvent(cityName))
     }
 
     fun chooseCity(foundCity: FoundCity) {
-        runAsync.runAsync(viewModelScope, background = {
-            repository.save(foundCity)
-        }) {
-        }
+        runAsync.runAsync(
+            scope = viewModelScope,
+            background = { repository.save(foundCity) },
+            ui = {}
+        )
     }
 
     companion object {
@@ -52,4 +56,4 @@ class FindCityViewModel @Inject constructor(
     }
 }
 
-class QueryEvent(val value: String)
+data class QueryEvent(val value: String)

@@ -52,7 +52,7 @@ fun FindCityScreen(
 @Composable
 fun FindCityScreenUi(
     input: String,
-    onInputChange:(String) -> Unit,
+    onInputChange: (String) -> Unit,
     foundCityUi: FoundCityUi,
     onFoundCityClick: (FoundCity) -> Unit,
     onRetryClick: () -> Unit
@@ -70,6 +70,7 @@ fun FindCityScreenUi(
             onValueChange = onInputChange,
         )
         foundCityUi.Show(onFoundCityClick, onRetryClick)
+
     }
 }
 
@@ -83,20 +84,20 @@ interface FoundCityUi : Serializable {
     }
 
     data class Base(
-        private val foundCity: FoundCity
+        private val foundCities: List<FoundCity>
     ) : FoundCityUi {
 
         @Composable
         override fun Show(onFoundCityClick: (FoundCity) -> Unit, onRetryClick: () -> Unit) {
-            Button(
-                onClick = {
-                    onFoundCityClick.invoke(foundCity)
+            foundCities.forEach { city ->
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    onClick = { onFoundCityClick(city) }
+                ) {
+                    Text("${city.name} ${city.countryName}")
                 }
-            ) {
-                Text(
-                    text = foundCity.name,
-                    modifier = Modifier.testTag("foundCityUi")
-                )
             }
         }
     }
@@ -165,11 +166,19 @@ fun PreviewEmptyFindCityScreenUi() {
 fun PreviewNotEmptyFindCityScreenUi() {
     FindCityScreenUi(
         input = "Mos", onInputChange = {}, foundCityUi = FoundCityUi.Base(
-            foundCity =
-            FoundCity(
-                name = "Moscow",
-                latitude = 55.75f,
-                longitude = 37.61f
+            foundCities = listOf(
+                FoundCity(
+                    name = "Moscow",
+                    latitude = 55.75f,
+                    longitude = 37.61f,
+                    countryCode = "RU"
+                ),
+                FoundCity(
+                    name = "Moscow",
+                    latitude = 55.75f,
+                    longitude = 37.61f,
+                    countryCode = "RU"
+                )
             )
         ),
         {}

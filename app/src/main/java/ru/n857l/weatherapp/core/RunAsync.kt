@@ -37,6 +37,9 @@ interface RunAsync<R : Any> {
     @Singleton
     class Base @Inject constructor(
     ) : RunAsync<QueryEvent> {
+
+        private val inputFlow = MutableStateFlow(QueryEvent(""))
+
         override fun <T : Any> runAsync(
             scope: CoroutineScope,
             background: suspend () -> T,
@@ -49,8 +52,6 @@ interface RunAsync<R : Any> {
                 }
             }
         }
-
-        private val inputFlow = MutableStateFlow(QueryEvent(""))
 
         override fun <T : Any> debounce(
             scope: CoroutineScope,
