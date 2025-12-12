@@ -2,10 +2,14 @@ package ru.n857l.weatherapp.weather.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
 import ru.n857l.weatherapp.findcity.presentation.NoConnectionErrorUi
@@ -28,7 +32,9 @@ fun WeatherScreenUi(
     onRetryClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         weatherUi.Show(onRetryClick)
     }
@@ -45,13 +51,29 @@ interface WeatherUi : Serializable {
 
     data class Base(
         val cityName: String,
-        val temperature: String
+        val temperature: String,
+        val feelsTemperature: String,
+        val pressure: String,
+        val humidity: String,
+        val seaLevelPressure: String,
+        val groundLevelPressure: String,
+        val speed: String,
+        val degree: String,
+        val gust: String,
+        val clouds: String,
+        val visibility: String
     ) : WeatherUi {
 
         @Composable
         override fun Show(onRetryClick: () -> Unit) {
-            Text(text = cityName)
-            Text(text = temperature)
+            Text(
+                text = cityName,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                text = temperature,
+                fontSize = 48.sp
+            )
         }
     }
 
@@ -74,17 +96,17 @@ interface WeatherUi : Serializable {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewWeatherScreenUi() {
-    WeatherScreenUi(
-        weatherUi = WeatherUi.Base(
-                cityName = "Moscow",
-            temperature = "12.1°C"
-        ),
-        onRetryClick = {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewWeatherScreenUi() {
+//    WeatherScreenUi(
+//        weatherUi = WeatherUi.Base(
+//                cityName = "Moscow",
+//            temperature = "12.1°C"
+//        ),
+//        onRetryClick = {}
+//    )
+//} TODO
 
 @Preview(showBackground = true)
 @Composable

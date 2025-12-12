@@ -43,7 +43,7 @@ data class Wind(
 
 data class Clouds(
     @SerializedName("all")
-    val all: Int
+    val clouds: Int
 )
 
 data class Sun(

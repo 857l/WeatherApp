@@ -71,6 +71,7 @@ fun FindCityScreenUi(
                 .fillMaxWidth()
                 .padding(8.dp)
                 .testTag("findCityInputField"),
+            maxLines = 1,
             value = input,
             onValueChange = onInputChange,
         )

@@ -13,8 +13,7 @@ interface WeatherResult {
         fun mapEmpty(): T
 
         fun mapWeather(
-            cityName: String,
-            temperature: Float
+            weatherInCity: WeatherInCity
         ): T
 
         fun mapNoInternetError(): T
@@ -25,7 +24,7 @@ interface WeatherResult {
     ) : WeatherResult {
 
         override fun <T : Serializable> map(mapper: Mapper<T>): T {
-            return mapper.mapWeather(weatherInCity.cityName, weatherInCity.temperature)
+            return mapper.mapWeather(weatherInCity)
         }
     }
 
