@@ -14,7 +14,9 @@ data class WeatherCloud(
     @SerializedName("dt")
     val dateTime: Long,
     @SerializedName("sys")
-    val sun: Sun
+    val sun: Sun,
+    @SerializedName("name")
+    val cityName: String
 )
 
 data class Main(

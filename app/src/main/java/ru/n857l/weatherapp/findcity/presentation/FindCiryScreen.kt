@@ -33,7 +33,8 @@ import java.io.Serializable
 @Composable
 fun FindCityScreen(
     viewModel: FindCityViewModel,
-    navigate: () -> Unit
+    navigate: () -> Unit,
+    onGetLocationClick: () -> Unit,
 ) {
     val input = rememberSaveable { mutableStateOf("") }
     val foundCityUi = viewModel.state.collectAsStateWithLifecycle()
@@ -50,7 +51,8 @@ fun FindCityScreen(
         },
         onRetryClick = {
             viewModel.findCity(cityName = input.value)
-        }
+        },
+        onGetLocationClick = onGetLocationClick
     )
 }
 
@@ -60,11 +62,19 @@ fun FindCityScreenUi(
     onInputChange: (String) -> Unit,
     foundCityUi: FoundCityUi,
     onFoundCityClick: (FoundCity) -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onGetLocationClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Button(
+            onClick = onGetLocationClick, modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(text = stringResource(R.string.get_location))
+        }
         OutlinedTextField(
             label = { Text(text = stringResource(R.string.city_name)) },
             modifier = Modifier
@@ -205,7 +215,7 @@ fun PreviewCityItem() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewEmptyFindCityScreenUi() {
-    FindCityScreenUi(input = "", onInputChange = {}, foundCityUi = FoundCityUi.Empty, {}) {
+    FindCityScreenUi(input = "", onInputChange = {}, foundCityUi = FoundCityUi.Empty, {}, {}) {
     }
 }
 
@@ -229,6 +239,7 @@ fun PreviewNotEmptyFindCityScreenUi() {
                 )
             )
         ),
+        {},
         {}
     ) {
     }
@@ -241,7 +252,7 @@ fun PreviewNoInternetConnection() {
         input = "mos",
         onInputChange = {},
         foundCityUi = FoundCityUi.NoConnectionError,
-        {}) {
+        {}, {}) {
     }
 }
 
@@ -249,6 +260,6 @@ fun PreviewNoInternetConnection() {
 @Composable
 fun PreviewLoading() {
     FindCityScreenUi(
-        input = "Mos", onInputChange = {}, foundCityUi = FoundCityUi.Loading, {}, {}
+        input = "Mos", onInputChange = {}, foundCityUi = FoundCityUi.Loading, {}, {}, {}
     )
 }

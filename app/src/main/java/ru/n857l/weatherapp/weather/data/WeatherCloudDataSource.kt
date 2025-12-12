@@ -7,18 +7,17 @@ import javax.inject.Inject
 
 interface WeatherCloudDataSource {
 
-    suspend fun temperature(latitude: Float, longitude: Float): WeatherCloud
+    suspend fun weather(latitude: Float, longitude: Float): WeatherCloud
 
     class Base @Inject constructor(
         private val service: WeatherService
     ) : WeatherCloudDataSource {
 
-        override suspend fun temperature(latitude: Float, longitude: Float): WeatherCloud {
+        override suspend fun weather(latitude: Float, longitude: Float): WeatherCloud {
             try {
                 val result = service.weather(latitude, longitude, API_KEY)
                     .execute()
-                val weather = result.body()!!
-                return weather
+                return result.body()!!
             } catch (e: Exception) {
                 if (e is IOException)
                     throw NoInternetException
