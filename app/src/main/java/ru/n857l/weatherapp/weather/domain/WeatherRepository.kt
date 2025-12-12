@@ -23,6 +23,8 @@ interface WeatherRepository {
                     cityName = cityName,
                     temperature = cloud.main.temperature,
                     feelsTemperature = cloud.main.feelsTemperature,
+                    tempMin = cloud.main.tempMin,
+                    tempMax = cloud.main.tempMax,
                     pressure = cloud.main.pressure,
                     humidity = cloud.main.humidity,
                     seaLevelPressure = cloud.main.seaLevelPressure,

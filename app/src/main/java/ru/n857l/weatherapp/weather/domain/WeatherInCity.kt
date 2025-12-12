@@ -6,6 +6,8 @@ data class WeatherInCity(
     val cityName: String,
     val temperature: Float,
     val feelsTemperature: Float,
+    val tempMin: Float,
+    val tempMax: Float,
     val pressure: Int,
     val humidity: Int,
     val seaLevelPressure: Int,
