@@ -8,5 +8,9 @@ data class FoundCityCloud(
     @SerializedName("lat")
     val latitude: Float,
     @SerializedName("lon")
-    val longitude: Float
+    val longitude: Float,
+    @SerializedName("country")
+    val countryName: String,
+    @SerializedName("state")
+    val state: String?
 )

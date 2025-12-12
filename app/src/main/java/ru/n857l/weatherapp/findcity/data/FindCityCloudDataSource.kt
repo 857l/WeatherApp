@@ -14,7 +14,11 @@ interface FindCityCloudDataSource {
 
         override suspend fun findCity(query: String): List<FoundCityCloud> {
             try {
-                val result = service.findCity(query, API_KEY).execute()
+                val result = service.findCity(
+                    query = query,
+                    apiKey = API_KEY
+                )
+                    .execute()
                 val list: List<FoundCityCloud> = result.body()!!
                 return list
             } catch (e: Exception) {

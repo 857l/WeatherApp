@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class FindCityUiMapper @Inject constructor() : FindCityResult.Mapper<FoundCityUi> {
 
-    override fun mapFoundCity(foundCity: FoundCity): FoundCityUi {
-        return FoundCityUi.Base(foundCity = foundCity)
+    override fun mapFoundCity(foundCities: List<FoundCity>): FoundCityUi {
+        return FoundCityUi.Base(foundCities = foundCities)
     }
 
     override fun mapEmpty(): FoundCityUi {

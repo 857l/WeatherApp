@@ -1,5 +1,6 @@
 package ru.n857l.weatherapp.findcity.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,7 +57,7 @@ fun FindCityScreen(
 @Composable
 fun FindCityScreenUi(
     input: String,
-    onInputChange:(String) -> Unit,
+    onInputChange: (String) -> Unit,
     foundCityUi: FoundCityUi,
     onFoundCityClick: (FoundCity) -> Unit,
     onRetryClick: () -> Unit
@@ -66,10 +71,12 @@ fun FindCityScreenUi(
                 .fillMaxWidth()
                 .padding(8.dp)
                 .testTag("findCityInputField"),
+            maxLines = 1,
             value = input,
             onValueChange = onInputChange,
         )
         foundCityUi.Show(onFoundCityClick, onRetryClick)
+
     }
 }
 
@@ -83,20 +90,17 @@ interface FoundCityUi : Serializable {
     }
 
     data class Base(
-        private val foundCity: FoundCity
+        private val foundCities: List<FoundCity>
     ) : FoundCityUi {
 
         @Composable
         override fun Show(onFoundCityClick: (FoundCity) -> Unit, onRetryClick: () -> Unit) {
-            Button(
-                onClick = {
-                    onFoundCityClick.invoke(foundCity)
-                }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text(
-                    text = foundCity.name,
-                    modifier = Modifier.testTag("foundCityUi")
-                )
+                items(foundCities) { city ->
+                    CityItem(city, onClick = onFoundCityClick)
+                }
             }
         }
     }
@@ -120,6 +124,37 @@ interface FoundCityUi : Serializable {
         ) {
             LoadingUi()
         }
+    }
+}
+
+@Composable
+fun CityItem(
+    city: FoundCity,
+    onClick: (FoundCity) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .clickable { onClick(city) }
+    ) {
+        Text(
+            text = city.name,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = city.fullCountryName,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        HorizontalDivider()
     }
 }
 
@@ -155,6 +190,20 @@ fun NoConnectionErrorUi(onRetryClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
+fun PreviewCityItem() {
+    CityItem(
+        city = FoundCity(
+            name = "Moscow",
+            latitude = 55.75f,
+            longitude = 37.61f,
+            countryCode = "RU"
+        ),
+        onClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
 fun PreviewEmptyFindCityScreenUi() {
     FindCityScreenUi(input = "", onInputChange = {}, foundCityUi = FoundCityUi.Empty, {}) {
     }
@@ -165,11 +214,19 @@ fun PreviewEmptyFindCityScreenUi() {
 fun PreviewNotEmptyFindCityScreenUi() {
     FindCityScreenUi(
         input = "Mos", onInputChange = {}, foundCityUi = FoundCityUi.Base(
-            foundCity =
-            FoundCity(
-                name = "Moscow",
-                latitude = 55.75f,
-                longitude = 37.61f
+            foundCities = listOf(
+                FoundCity(
+                    name = "Moscow",
+                    latitude = 55.75f,
+                    longitude = 37.61f,
+                    countryCode = "RU"
+                ),
+                FoundCity(
+                    name = "Moscow",
+                    latitude = 55.75f,
+                    longitude = 37.61f,
+                    countryCode = "RU"
+                )
             )
         ),
         {}
