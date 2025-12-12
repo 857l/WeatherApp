@@ -20,8 +20,9 @@ class WeatherUiMapper @Inject constructor() : WeatherResult.Mapper<WeatherUi> {
     ): WeatherUi {
         return WeatherUi.Base(
             cityName = weatherInCity.cityName,
-            temperature = "${weatherInCity.temperature.roundToInt()}°C",
-            feelsTemperature = "${weatherInCity.feelsTemperature.roundToInt()}°C",
+            temperature = "${weatherInCity.temperature.roundToInt()}°",
+            feelsTemperature = "Feels like ${weatherInCity.feelsTemperature.roundToInt()}°",
+            minMaxTemperature = "↑${weatherInCity.tempMin.roundToInt()}° / ↓${weatherInCity.tempMax.roundToInt()}°",
             pressure = "${weatherInCity.pressure} мм рт. ст.",
             seaLevelPressure = "${weatherInCity.seaLevelPressure} мм рт. ст.",
             groundLevelPressure = "${weatherInCity.groundLevelPressure} мм рт. ст.",

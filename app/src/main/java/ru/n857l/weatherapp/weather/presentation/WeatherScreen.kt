@@ -3,7 +3,6 @@ package ru.n857l.weatherapp.weather.presentation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -53,6 +52,7 @@ interface WeatherUi : Serializable {
         val cityName: String,
         val temperature: String,
         val feelsTemperature: String,
+        val minMaxTemperature: String,
         val pressure: String,
         val humidity: String,
         val seaLevelPressure: String,
@@ -68,12 +68,22 @@ interface WeatherUi : Serializable {
         override fun Show(onRetryClick: () -> Unit) {
             Text(
                 text = cityName,
-                style = MaterialTheme.typography.titleLarge
+                fontSize = 24.sp
             )
             Text(
                 text = temperature,
-                fontSize = 48.sp
+                fontSize = 42.sp,
+                modifier = Modifier.padding(vertical = 12.dp)
             )
+            Text(text = minMaxTemperature)
+            Text(text = feelsTemperature)
+            Text(text = pressure)
+            Text(text = humidity)
+            Text(text = seaLevelPressure)
+            Text(text = groundLevelPressure)
+            Text(text = speed)
+            Text(text = degree)
+            Text(text = gust)
         }
     }
 
@@ -96,17 +106,28 @@ interface WeatherUi : Serializable {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewWeatherScreenUi() {
-//    WeatherScreenUi(
-//        weatherUi = WeatherUi.Base(
-//                cityName = "Moscow",
-//            temperature = "12.1°C"
-//        ),
-//        onRetryClick = {}
-//    )
-//} TODO
+@Preview(showBackground = true)
+@Composable
+fun PreviewWeatherScreenUi() {
+    WeatherScreenUi(
+        weatherUi = WeatherUi.Base(
+            cityName = "Moscow",
+            temperature = "12.1°",
+            feelsTemperature = "Feels like 12.1°",
+            pressure = "12.1 мм рт. ст.",
+            humidity = "60%",
+            seaLevelPressure = "12.1 мм рт. ст.",
+            groundLevelPressure = "12.1 мм рт. ст.",
+            speed = "12.1 м/c",
+            degree = "12.1°",
+            gust = "12.1",
+            clouds = "12",
+            visibility = "12 м",
+            minMaxTemperature = "↑12.1° / ↓12.1°"
+        ),
+        onRetryClick = {}
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

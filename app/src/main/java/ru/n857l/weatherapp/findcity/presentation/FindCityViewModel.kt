@@ -51,6 +51,13 @@ class FindCityViewModel @Inject constructor(
         )
     }
 
+    fun chooseLocation(lat: Double, lon: Double) {
+        runAsync.runAsync(viewModelScope, background = {
+            repository.save(lat, lon)
+        }) {
+        }
+    }
+
     companion object {
         private const val KEY = "FoundCityUiKey"
     }

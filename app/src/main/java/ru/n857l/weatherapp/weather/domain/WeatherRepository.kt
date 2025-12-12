@@ -16,25 +16,27 @@ interface WeatherRepository {
 
         override suspend fun weather(): WeatherResult {
             try {
-                val (latitude, longitude, cityName) = cacheDataSource.cityParams()
-                val cloud = cloudDataSource.temperature(latitude, longitude)
+                val (latitude, longitude) = cacheDataSource.cityParams()
+                val weatherCloud = cloudDataSource.weather(latitude, longitude)
 
                 val weatherInCity = WeatherInCity(
-                    cityName = cityName,
-                    temperature = cloud.main.temperature,
-                    feelsTemperature = cloud.main.feelsTemperature,
-                    pressure = cloud.main.pressure,
-                    humidity = cloud.main.humidity,
-                    seaLevelPressure = cloud.main.seaLevelPressure,
-                    groundLevelPressure = cloud.main.groundLevelPressure,
-                    speed = cloud.wind.speed,
-                    degree = cloud.wind.degree,
-                    gust = cloud.wind.gust,
-                    clouds = cloud.clouds.clouds,
-                    dateTime = cloud.dateTime,
-                    sunrise = cloud.sun.sunrise,
-                    sunset = cloud.sun.sunset,
-                    visibility = cloud.visibility
+                    cityName = weatherCloud.cityName,
+                    temperature = weatherCloud.main.temperature,
+                    feelsTemperature = weatherCloud.main.feelsTemperature,
+                    tempMin = weatherCloud.main.tempMin,
+                    tempMax = weatherCloud.main.tempMax,
+                    pressure = weatherCloud.main.pressure,
+                    humidity = weatherCloud.main.humidity,
+                    seaLevelPressure = weatherCloud.main.seaLevelPressure,
+                    groundLevelPressure = weatherCloud.main.groundLevelPressure,
+                    speed = weatherCloud.wind.speed,
+                    degree = weatherCloud.wind.degree,
+                    gust = weatherCloud.wind.gust,
+                    clouds = weatherCloud.clouds.clouds,
+                    dateTime = weatherCloud.dateTime,
+                    sunrise = weatherCloud.sun.sunrise,
+                    sunset = weatherCloud.sun.sunset,
+                    visibility = weatherCloud.visibility
                 )
 
                 return WeatherResult.Base(weatherInCity)
