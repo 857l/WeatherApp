@@ -16,12 +16,13 @@ import java.io.Serializable
 
 @Composable
 fun WeatherScreen(
-    viewModel: WeatherViewModel
+    viewModel: WeatherViewModel,
+    goToChooseLocation: () -> Unit
 ) {
     val weatherScreenUi = viewModel.state.collectAsStateWithLifecycle()
     WeatherScreenUi(
         weatherUi = weatherScreenUi.value,
-        onRetryClick = viewModel::loadWeather
+        onRetryClick = viewModel::loadWeather,
     )
 }
 

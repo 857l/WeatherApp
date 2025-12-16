@@ -11,6 +11,7 @@ import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherService
 import ru.n857l.weatherapp.weather.domain.WeatherRepository
 import ru.n857l.weatherapp.weather.domain.WeatherResult
+import ru.n857l.weatherapp.weather.presentation.TimeWrapper
 import ru.n857l.weatherapp.weather.presentation.WeatherUi
 import ru.n857l.weatherapp.weather.presentation.WeatherUiMapper
 
@@ -38,4 +39,7 @@ abstract class WeatherBindModule {
 
     @Binds
     abstract fun bindWeatherUiMapper(mapper: WeatherUiMapper): WeatherResult.Mapper<WeatherUi>
+
+    @Binds
+    abstract fun bindTimeWrapper(wrapper: TimeWrapper.Base): TimeWrapper
 }

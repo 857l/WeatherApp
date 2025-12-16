@@ -3,6 +3,8 @@ package ru.n857l.weatherapp.weather.domain
 import java.io.Serializable
 
 data class WeatherInCity(
+    val lat: Float,
+    val lon: Float,
     val cityName: String,
     val temperature: Float,
     val feelsTemperature: Float,
@@ -20,4 +22,9 @@ data class WeatherInCity(
     val sunrise: Long,
     val sunset: Long,
     val visibility: Int
-) : Serializable
+) : Serializable {
+
+    fun isEmpty() = dateTime == 0L
+
+    fun same(latitude: Float, longitude: Float) = lat == latitude && lon == longitude
+}
