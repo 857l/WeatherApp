@@ -14,16 +14,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import ru.n857l.weatherapp.findcity.presentation.FindCityOrGetLocationScreen
 import ru.n857l.weatherapp.findcity.presentation.FindCityViewModel
 import ru.n857l.weatherapp.ui.theme.WeatherAppTheme
+import ru.n857l.weatherapp.weather.data.WeatherCacheDataSource
 import ru.n857l.weatherapp.weather.presentation.WeatherScreen
 import ru.n857l.weatherapp.weather.presentation.WeatherViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -44,10 +48,13 @@ class MainActivity : ComponentActivity() {
 @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
 @Composable
 private fun MainContent(innerPadding: PaddingValues) {
+    val mainViewModel = hiltViewModel<MainViewModel>()
+    val startDestination =
+        if (mainViewModel.hasAlreadyChosenLocation()) "weatherScreen" else "findCityScreen"
     val navController: NavHostController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "findCityScreen",
+        startDestination = startDestination,
         modifier = Modifier.padding(paddingValues = innerPadding)
     ) {
         composable("findCityScreen") {
@@ -60,7 +67,21 @@ private fun MainContent(innerPadding: PaddingValues) {
         }
 
         composable("weatherScreen") {
-            WeatherScreen(viewModel = hiltViewModel<WeatherViewModel>())
+            WeatherScreen(
+                viewModel = hiltViewModel<WeatherViewModel>(),
+                navController = navController
+            )
         }
+    }
+}
+
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val weatherCacheDataSource: WeatherCacheDataSource
+) : ViewModel() {
+
+    fun hasAlreadyChosenLocation(): Boolean {
+        val (lat, lon) = weatherCacheDataSource.cityParams()
+        return lat != 0f && lon != 0f
     }
 }

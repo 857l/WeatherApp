@@ -30,6 +30,8 @@ interface WeatherCacheDataSource {
 
         override fun saveWeather(params: WeatherInCity) {
             sharedPreferences.edit {
+                putFloat(WEATHER_LAT, params.lat)
+                putFloat(WEATHER_LON, params.lon)
                 putString(WEATHER_CITY, params.cityName)
                 putFloat(WEATHER_TEMP, params.temperature)
                 putFloat(WEATHER_FEELS_TEMP, params.feelsTemperature)
@@ -51,6 +53,8 @@ interface WeatherCacheDataSource {
         }
 
         override fun savedWeather(): WeatherInCity {
+            val latitude = sharedPreferences.getFloat(WEATHER_LAT, 0f)
+            val longitude = sharedPreferences.getFloat(WEATHER_LON, 0f)
             val cityName = sharedPreferences.getString(WEATHER_CITY, "") ?: ""
             val temperature = sharedPreferences.getFloat(WEATHER_TEMP, 0f)
             val feelsTemperature = sharedPreferences.getFloat(WEATHER_FEELS_TEMP, 0f)
@@ -69,6 +73,7 @@ interface WeatherCacheDataSource {
             val sunset = sharedPreferences.getLong(WEATHER_SUNSET, 0)
             val visibility = sharedPreferences.getInt(WEATHER_VISIBILITY, 0)
             return WeatherInCity(
+                latitude, longitude,
                 cityName, temperature, feelsTemperature, tempMin, tempMax,
                 pressure, humidity, seaLevelPressure, groundLevelPressure,
                 speed, degree, gust, clouds, dateTime, sunrise, sunset, visibility
@@ -78,6 +83,8 @@ interface WeatherCacheDataSource {
         companion object {
             private const val LATITUDE = "latitudeKey"
             private const val LONGITUDE = "longitudeKey"
+            private const val WEATHER_LAT = "WEATHER_LAT"
+            private const val WEATHER_LON = "WEATHER_LON"
             private const val WEATHER_CITY = "cityNameKey"
             private const val WEATHER_TEMP = "temperatureKey"
             private const val WEATHER_FEELS_TEMP = "feelsTemperatureKey"

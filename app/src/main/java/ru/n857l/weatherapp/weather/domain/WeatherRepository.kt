@@ -45,9 +45,9 @@ interface WeatherRepository {
                             degree = weatherCloud.wind.degree,
                             gust = weatherCloud.wind.gust,
                             clouds = weatherCloud.clouds.clouds,
-                            dateTime = weatherCloud.dateTime,
-                            sunrise = weatherCloud.sun.sunrise,
-                            sunset = weatherCloud.sun.sunset,
+                            dateTime = weatherCloud.dateTime * 1000L,
+                            sunrise = weatherCloud.sun.sunrise * 1000L,
+                            sunset = weatherCloud.sun.sunset * 1000L,
                             visibility = weatherCloud.visibility
                         )
                         cacheDataSource.saveWeather(weatherInCity)

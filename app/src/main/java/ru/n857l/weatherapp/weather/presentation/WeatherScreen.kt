@@ -1,5 +1,6 @@
 package ru.n857l.weatherapp.weather.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
 import ru.n857l.weatherapp.findcity.presentation.NoConnectionErrorUi
 import java.io.Serializable
@@ -17,8 +19,16 @@ import java.io.Serializable
 @Composable
 fun WeatherScreen(
     viewModel: WeatherViewModel,
-    goToChooseLocation: () -> Unit
+    navController: NavController
 ) {
+    BackHandler {
+        navController.navigate("findCityScreen") {
+            popUpTo("weatherScreen") {
+                inclusive = true
+            }
+        }
+    }
+
     val weatherScreenUi = viewModel.state.collectAsStateWithLifecycle()
     WeatherScreenUi(
         weatherUi = weatherScreenUi.value,
@@ -62,7 +72,8 @@ interface WeatherUi : Serializable {
         val degree: String,
         val gust: String,
         val clouds: String,
-        val visibility: String
+        val visibility: String,
+        val time: String
     ) : WeatherUi {
 
         @Composable
@@ -85,6 +96,7 @@ interface WeatherUi : Serializable {
             Text(text = speed)
             Text(text = degree)
             Text(text = gust)
+            Text(text = time)
         }
     }
 
@@ -124,7 +136,8 @@ fun PreviewWeatherScreenUi() {
             gust = "12.1",
             clouds = "12",
             visibility = "12 м",
-            minMaxTemperature = "↑12.1° / ↓12.1°"
+            minMaxTemperature = "↑12.1° / ↓12.1°",
+            time = "12:11"
         ),
         onRetryClick = {}
     )
