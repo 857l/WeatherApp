@@ -3,6 +3,8 @@ package ru.n857l.weatherapp.weather.data
 import com.google.gson.annotations.SerializedName
 
 data class WeatherCloud(
+    @SerializedName("coord")
+    val coordinates: Coordinates,
     @SerializedName("main")
     val main: Main,
     @SerializedName("visibility")
@@ -17,6 +19,13 @@ data class WeatherCloud(
     val sun: Sun,
     @SerializedName("name")
     val cityName: String
+)
+
+data class Coordinates(
+    @SerializedName("lon")
+    val longitude: Float,
+    @SerializedName("lat")
+    val latitude: Float
 )
 
 data class Main(

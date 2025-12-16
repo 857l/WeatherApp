@@ -10,6 +10,7 @@ interface WeatherRepository {
     suspend fun weather(): WeatherResult
 
     class Base @Inject constructor(
+        private val refreshMinutes: Int,
         private val cacheDataSource: WeatherCacheDataSource,
         private val cloudDataSource: WeatherCloudDataSource
     ) : WeatherRepository {
@@ -17,29 +18,45 @@ interface WeatherRepository {
         override suspend fun weather(): WeatherResult {
             try {
                 val (latitude, longitude) = cacheDataSource.cityParams()
-                val weatherCloud = cloudDataSource.weather(latitude, longitude)
 
-                val weatherInCity = WeatherInCity(
-                    cityName = weatherCloud.cityName,
-                    temperature = weatherCloud.main.temperature,
-                    feelsTemperature = weatherCloud.main.feelsTemperature,
-                    tempMin = weatherCloud.main.tempMin,
-                    tempMax = weatherCloud.main.tempMax,
-                    pressure = weatherCloud.main.pressure,
-                    humidity = weatherCloud.main.humidity,
-                    seaLevelPressure = weatherCloud.main.seaLevelPressure,
-                    groundLevelPressure = weatherCloud.main.groundLevelPressure,
-                    speed = weatherCloud.wind.speed,
-                    degree = weatherCloud.wind.degree,
-                    gust = weatherCloud.wind.gust,
-                    clouds = weatherCloud.clouds.clouds,
-                    dateTime = weatherCloud.dateTime,
-                    sunrise = weatherCloud.sun.sunrise,
-                    sunset = weatherCloud.sun.sunset,
-                    visibility = weatherCloud.visibility
-                )
+                val savedWeather = cacheDataSource.savedWeather()
 
-                return WeatherResult.Base(weatherInCity)
+                val invalidSavedWeather =
+                    savedWeather.isEmpty() || !savedWeather.same(latitude, longitude)
+                val needRefresh =
+                    System.currentTimeMillis() - savedWeather.dateTime > refreshMinutes * 60 * 1000
+
+                if (invalidSavedWeather || needRefresh) {
+                    try {
+                        val weatherCloud = cloudDataSource.weather(latitude, longitude)
+                        val weatherInCity = WeatherInCity(
+                            lon = weatherCloud.coordinates.longitude,
+                            lat = weatherCloud.coordinates.latitude,
+                            cityName = weatherCloud.cityName,
+                            temperature = weatherCloud.main.temperature,
+                            feelsTemperature = weatherCloud.main.feelsTemperature,
+                            tempMin = weatherCloud.main.tempMin,
+                            tempMax = weatherCloud.main.tempMax,
+                            pressure = weatherCloud.main.pressure,
+                            humidity = weatherCloud.main.humidity,
+                            seaLevelPressure = weatherCloud.main.seaLevelPressure,
+                            groundLevelPressure = weatherCloud.main.groundLevelPressure,
+                            speed = weatherCloud.wind.speed,
+                            degree = weatherCloud.wind.degree,
+                            gust = weatherCloud.wind.gust,
+                            clouds = weatherCloud.clouds.clouds,
+                            dateTime = weatherCloud.dateTime,
+                            sunrise = weatherCloud.sun.sunrise,
+                            sunset = weatherCloud.sun.sunset,
+                            visibility = weatherCloud.visibility
+                        )
+                        cacheDataSource.saveWeather(weatherInCity)
+                        return WeatherResult.Base(weatherInCity)
+                    } catch (e: Exception) {
+                        if (invalidSavedWeather) throw e
+                    }
+                }
+                return WeatherResult.Base(savedWeather)
             } catch (e: DomainException) {
                 return WeatherResult.Failed(e)
             }

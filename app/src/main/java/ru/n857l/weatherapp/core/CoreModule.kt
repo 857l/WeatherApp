@@ -29,4 +29,7 @@ class CoreModule {
         .baseUrl("https://api.openweathermap.org")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    @Provides
+    fun provideMinutes(): Int = 10
 }

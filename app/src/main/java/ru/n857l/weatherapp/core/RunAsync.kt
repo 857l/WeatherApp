@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.n857l.weatherapp.findcity.presentation.QueryEvent
 import javax.inject.Inject
-import javax.inject.Singleton
 
 interface RunAsync<R : Any> {
 
@@ -34,7 +33,6 @@ interface RunAsync<R : Any> {
     fun emit(value: R)
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    @Singleton
     class Base @Inject constructor(
     ) : RunAsync<QueryEvent> {
 
