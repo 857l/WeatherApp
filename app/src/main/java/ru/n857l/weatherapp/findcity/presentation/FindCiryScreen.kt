@@ -1,5 +1,6 @@
 package ru.n857l.weatherapp.findcity.presentation
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -120,7 +121,16 @@ interface FoundCityUi : Serializable {
 
         @Composable
         override fun Show(onFoundCityClick: (FoundCity) -> Unit, onRetryClick: () -> Unit) {
-            NoConnectionErrorUi(onRetryClick)
+            ErrorUi(R.string.no_internet_connection, onRetryClick)
+        }
+    }
+
+    data object ServiceUnavailableError : FoundCityUi {
+        private fun readResolve(): Any = NoConnectionError
+
+        @Composable
+        override fun Show(onFoundCityClick: (FoundCity) -> Unit, onRetryClick: () -> Unit) {
+            ErrorUi(R.string.service_unavailable, onRetryClick)
         }
     }
 
@@ -182,13 +192,13 @@ fun LoadingUi() {
 }
 
 @Composable
-fun NoConnectionErrorUi(onRetryClick: () -> Unit) {
+fun ErrorUi(@StringRes errorId: Int, onRetryClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.no_internet_connection),
+            text = stringResource(errorId),
             modifier = Modifier.testTag("noInternetConnection")
         )
         Spacer(modifier = Modifier.height(24.dp))

@@ -13,13 +13,11 @@ class WeatherUiMapper @Inject constructor(
     private val timeWrapper: TimeWrapper
 ) : WeatherResult.Mapper<WeatherUi> {
 
-    override fun mapEmpty(): WeatherUi {
-        return WeatherUi.Empty
-    }
+    override fun mapEmpty(): WeatherUi = WeatherUi.Empty
 
-    override fun mapNoInternetError(): WeatherUi {
-        return WeatherUi.NoConnectionError
-    }
+    override fun mapNoInternetError(): WeatherUi = WeatherUi.NoConnectionError
+
+    override fun mapServiceUnavailableError(): WeatherUi = WeatherUi.ServiceUnavailableError
 
     override fun mapWeather(
         weatherInCity: WeatherInCity

@@ -12,8 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import ru.n857l.weatherapp.R
+import ru.n857l.weatherapp.findcity.presentation.ErrorUi
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
-import ru.n857l.weatherapp.findcity.presentation.NoConnectionErrorUi
 import java.io.Serializable
 
 @Composable
@@ -105,7 +106,16 @@ interface WeatherUi : Serializable {
 
         @Composable
         override fun Show(onRetryClick: () -> Unit) {
-            NoConnectionErrorUi(onRetryClick)
+            ErrorUi(R.string.no_internet_connection, onRetryClick)
+        }
+    }
+
+    data object ServiceUnavailableError : WeatherUi {
+        private fun readResolve(): Any = ServiceUnavailableError
+
+        @Composable
+        override fun Show(onRetryClick: () -> Unit) {
+            ErrorUi(R.string.service_unavailable, onRetryClick)
         }
     }
 
