@@ -17,6 +17,8 @@ interface WeatherResult {
         ): T
 
         fun mapNoInternetError(): T
+
+        fun mapServiceUnavailableError(): T
     }
 
     data class Base(
@@ -29,11 +31,10 @@ interface WeatherResult {
     }
 
     data class Failed(private val error: DomainException) : WeatherResult {
-        override fun <T : Serializable> map(mapper: Mapper<T>): T {
-            return if (error is NoInternetException)
+        override fun <T : Serializable> map(mapper: Mapper<T>): T =
+            if (error is NoInternetException)
                 mapper.mapNoInternetError()
             else
-                TODO("to be done next time maybe")
-        }
+                mapper.mapServiceUnavailableError()
     }
 }

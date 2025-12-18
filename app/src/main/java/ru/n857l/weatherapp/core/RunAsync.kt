@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
@@ -31,6 +32,12 @@ interface RunAsync<R : Any> {
     )
 
     fun emit(value: R)
+
+    fun <T : Any> runFlow(
+        scope: CoroutineScope,
+        flow: Flow<T>,
+        onEach: suspend (T) -> Unit
+    )
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     class Base @Inject constructor(
@@ -69,6 +76,17 @@ interface RunAsync<R : Any> {
 
         override fun emit(value: QueryEvent) {
             inputFlow.value = value
+        }
+
+        override fun <T : Any> runFlow(
+            scope: CoroutineScope,
+            flow: Flow<T>,
+            onEach: suspend (T) -> Unit
+        ) {
+            flow
+                .onEach(onEach)
+                .flowOn(Dispatchers.IO)
+                .launchIn(scope)
         }
     }
 }

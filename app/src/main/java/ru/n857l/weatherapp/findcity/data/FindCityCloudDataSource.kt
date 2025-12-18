@@ -1,6 +1,7 @@
 package ru.n857l.weatherapp.findcity.data
 
 import ru.n857l.weatherapp.findcity.domain.NoInternetException
+import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
 import java.io.IOException
 import javax.inject.Inject
 
@@ -24,8 +25,8 @@ interface FindCityCloudDataSource {
             } catch (e: Exception) {
                 if (e is IOException)
                     throw NoInternetException
-                //todo else throw generic error
-                throw e
+                else
+                    throw ServiceUnavailableException
             }
         }
     }

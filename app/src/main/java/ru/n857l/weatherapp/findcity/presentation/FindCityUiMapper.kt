@@ -6,15 +6,12 @@ import javax.inject.Inject
 
 class FindCityUiMapper @Inject constructor() : FindCityResult.Mapper<FoundCityUi> {
 
-    override fun mapFoundCity(foundCities: List<FoundCity>): FoundCityUi {
-        return FoundCityUi.Base(foundCities = foundCities)
-    }
+    override fun mapFoundCity(foundCities: List<FoundCity>): FoundCityUi =
+        FoundCityUi.Base(foundCities = foundCities)
 
-    override fun mapEmpty(): FoundCityUi {
-        return FoundCityUi.Empty
-    }
+    override fun mapEmpty(): FoundCityUi = FoundCityUi.Empty
 
-    override fun mapNoInternetError(): FoundCityUi {
-        return FoundCityUi.NoConnectionError
-    }
+    override fun mapNoInternetError(): FoundCityUi = FoundCityUi.NoConnectionError
+
+    override fun mapServiceUnavailableError(): FoundCityUi = FoundCityUi.ServiceUnavailableError
 }

@@ -13,6 +13,8 @@ interface FindCityResult {
         fun mapEmpty(): T
 
         fun mapNoInternetError(): T
+
+        fun mapServiceUnavailableError(): T
     }
 
     data class Base(
@@ -25,13 +27,11 @@ interface FindCityResult {
     }
 
     data class Failed(private val error: DomainException) : FindCityResult {
-        override fun <T : Serializable> map(mapper: Mapper<T>): T {
+        override fun <T : Serializable> map(mapper: Mapper<T>): T =
             if (error is NoInternetException)
-                return mapper.mapNoInternetError()
+                mapper.mapNoInternetError()
             else
-                TODO("to be done next time")
-            //return mapper.mapGenericError()
-        }
+                mapper.mapServiceUnavailableError()
     }
 
     data object Empty : FindCityResult {

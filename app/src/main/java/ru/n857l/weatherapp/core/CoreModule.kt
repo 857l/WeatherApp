@@ -16,7 +16,7 @@ abstract class CoreBindsModule {
 
     @Binds
     @Singleton
-    abstract fun binRunAsync(runAsync: RunAsync.Base): RunAsync<QueryEvent>
+    abstract fun bindRunAsync(runAsync: RunAsync.Base): RunAsync<QueryEvent>
 }
 
 @Module
@@ -31,5 +31,5 @@ class CoreModule {
         .build()
 
     @Provides
-    fun provideMinutes(): Int = 10
+    fun provideMinutes(): Int = 1
 }

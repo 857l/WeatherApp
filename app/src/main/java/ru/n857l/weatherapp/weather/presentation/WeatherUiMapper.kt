@@ -2,7 +2,6 @@ package ru.n857l.weatherapp.weather.presentation
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
-import android.text.format.DateUtils
 import ru.n857l.weatherapp.weather.domain.WeatherInCity
 import ru.n857l.weatherapp.weather.domain.WeatherResult
 import java.util.Date
@@ -10,15 +9,15 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-class WeatherUiMapper @Inject constructor() : WeatherResult.Mapper<WeatherUi> {
+class WeatherUiMapper @Inject constructor(
+    private val timeWrapper: TimeWrapper
+) : WeatherResult.Mapper<WeatherUi> {
 
-    override fun mapEmpty(): WeatherUi {
-        return WeatherUi.Empty
-    }
+    override fun mapEmpty(): WeatherUi = WeatherUi.Empty
 
-    override fun mapNoInternetError(): WeatherUi {
-        return WeatherUi.NoConnectionError
-    }
+    override fun mapNoInternetError(): WeatherUi = WeatherUi.NoConnectionError
+
+    override fun mapServiceUnavailableError(): WeatherUi = WeatherUi.ServiceUnavailableError
 
     override fun mapWeather(
         weatherInCity: WeatherInCity
@@ -36,7 +35,8 @@ class WeatherUiMapper @Inject constructor() : WeatherResult.Mapper<WeatherUi> {
             degree = "${weatherInCity.degree}°",
             gust = "${weatherInCity.gust}",
             clouds = "${weatherInCity.clouds}",
-            visibility = "${weatherInCity.visibility} м"
+            visibility = "${weatherInCity.visibility} м",
+            time = timeWrapper.getHumanReadableTime(weatherInCity.dateTime)
         )
     }
 }
@@ -52,17 +52,10 @@ interface TimeWrapper {
     ) : TimeWrapper {
 
         override fun getHumanReadableTime(timeMillis: Long): String {
-            val now = System.currentTimeMillis()
-            val ago = DateUtils.getRelativeTimeSpanString(
-                timeMillis,
-                now,
-                DateUtils.MINUTE_IN_MILLIS,
-                DateUtils.FORMAT_ABBREV_RELATIVE
-            ).toString()
-            val dateFormat = SimpleDateFormat("HH:mm dd-MMM-yyyy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("HH:mm dd MMM yyyy", Locale.getDefault())
             dateFormat.timeZone = TimeZone.getDefault()
             val time = dateFormat.format(Date(timeMillis))
-            return "$ago ($time)"
+            return time
         }
 
         override fun minutesDifference(timeMillis: Long): Boolean {
