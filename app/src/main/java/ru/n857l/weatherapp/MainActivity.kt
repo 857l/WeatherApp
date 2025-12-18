@@ -21,10 +21,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ru.n857l.weatherapp.findcity.data.FindCityDao
 import ru.n857l.weatherapp.findcity.presentation.FindCityOrGetLocationScreen
 import ru.n857l.weatherapp.findcity.presentation.FindCityViewModel
 import ru.n857l.weatherapp.ui.theme.WeatherAppTheme
-import ru.n857l.weatherapp.weather.data.WeatherCacheDataSource
 import ru.n857l.weatherapp.weather.presentation.WeatherScreen
 import ru.n857l.weatherapp.weather.presentation.WeatherViewModel
 import javax.inject.Inject
@@ -77,11 +77,10 @@ private fun MainContent(innerPadding: PaddingValues) {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val weatherCacheDataSource: WeatherCacheDataSource
+    private val findCityDao: FindCityDao,
 ) : ViewModel() {
 
-    fun hasAlreadyChosenLocation(): Boolean {
-        val (lat, lon) = weatherCacheDataSource.cityParams()
-        return lat != 0f && lon != 0f
-    }
+    fun hasAlreadyChosenLocation(): Boolean =
+        findCityDao.getCity() != null
+    //TODO
 }

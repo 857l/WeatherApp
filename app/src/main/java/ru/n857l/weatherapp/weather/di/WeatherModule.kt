@@ -6,7 +6,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import retrofit2.Retrofit
-import ru.n857l.weatherapp.weather.data.WeatherCacheDataSource
 import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherService
 import ru.n857l.weatherapp.weather.domain.WeatherRepository
@@ -27,9 +26,6 @@ class WeatherModule {
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class WeatherBindModule {
-
-    @Binds
-    abstract fun bindWeatherCacheDataSource(dataSource: WeatherCacheDataSource.Base): WeatherCacheDataSource
 
     @Binds
     abstract fun bindWeatherCloudDataSource(cloudDataSource: WeatherCloudDataSource.Base): WeatherCloudDataSource

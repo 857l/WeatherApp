@@ -1,7 +1,8 @@
 package ru.n857l.weatherapp.findcity.domain
 
-import ru.n857l.weatherapp.findcity.data.FindCityCacheDataSource
 import ru.n857l.weatherapp.findcity.data.FindCityCloudDataSource
+import ru.n857l.weatherapp.findcity.data.FindCityDao
+import ru.n857l.weatherapp.findcity.data.FindCityEntity
 import javax.inject.Inject
 
 interface FindCityRepository {
@@ -14,7 +15,7 @@ interface FindCityRepository {
 
     class Base @Inject constructor(
         private val cloudDataSource: FindCityCloudDataSource,
-        private val cacheDataSource: FindCityCacheDataSource
+        private val findCityDao: FindCityDao
     ) : FindCityRepository {
 
         override suspend fun findCity(name: String): FindCityResult {
@@ -38,16 +39,20 @@ interface FindCityRepository {
         }
 
         override suspend fun save(foundCity: FoundCity) {
-            cacheDataSource.save(
-                foundCity.latitude,
-                foundCity.longitude,
+            findCityDao.saveCity(
+                FindCityEntity(
+                    lat = foundCity.latitude,
+                    lon = foundCity.longitude
+                )
             )
         }
 
         override suspend fun save(lat: Double, lon: Double) {
-            cacheDataSource.save(
-                lat.toFloat(),
-                lon.toFloat(),
+            findCityDao.saveCity(
+                FindCityEntity(
+                    lat = lat.toFloat(),
+                    lon = lon.toFloat()
+                )
             )
         }
     }
