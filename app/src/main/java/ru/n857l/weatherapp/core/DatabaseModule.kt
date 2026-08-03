@@ -24,7 +24,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "weather.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     fun provideFindCityDao(db: AppDatabase): FindCityDao = db.findCityDao()

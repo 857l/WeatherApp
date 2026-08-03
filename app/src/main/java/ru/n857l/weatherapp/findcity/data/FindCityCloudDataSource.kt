@@ -4,6 +4,7 @@ import ru.n857l.weatherapp.findcity.domain.NoInternetException
 import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
 import java.io.IOException
 import javax.inject.Inject
+import ru.n857l.weatherapp.BuildConfig
 
 interface FindCityCloudDataSource {
 
@@ -32,4 +33,4 @@ interface FindCityCloudDataSource {
     }
 }
 
-const val API_KEY = "a769a571ff80f294c7dcc54dbe3783a3"
+const val API_KEY = BuildConfig.OWM_API_KEY

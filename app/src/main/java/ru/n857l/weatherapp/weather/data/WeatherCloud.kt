@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class WeatherCloud(
     @SerializedName("coord")
     val coordinates: Coordinates,
+    @SerializedName("weather")
+    val weather: List<WeatherDescription> = emptyList(),
     @SerializedName("main")
     val main: Main,
     @SerializedName("visibility")
@@ -21,6 +23,12 @@ data class WeatherCloud(
     val cityName: String
 )
 
+data class WeatherDescription(
+    @SerializedName("description")
+    val description: String,
+    @SerializedName("icon")
+    val icon: String
+)
 data class Coordinates(
     @SerializedName("lon")
     val longitude: Float,

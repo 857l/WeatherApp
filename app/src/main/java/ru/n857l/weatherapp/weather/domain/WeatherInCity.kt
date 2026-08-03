@@ -5,6 +5,8 @@ import java.io.Serializable
 data class WeatherInCity(
     val lat: Float,
     val lon: Float,
+    val icon: String,
+    val description: String,
     val cityName: String,
     val temperature: Float,
     val feelsTemperature: Float,

@@ -26,6 +26,8 @@ data class WeatherEntity(
     @PrimaryKey
     val id: Int = 0,
     val cityName: String,
+    val icon: String,
+    val description: String,
     val lat: Float,
     val lon: Float,
     val temperature: Float,
@@ -49,6 +51,8 @@ data class WeatherEntity(
     fun toDomain(): WeatherInCity = WeatherInCity(
         lat = lat,
         lon = lon,
+        icon = icon,
+        description = description,
         cityName = cityName,
         temperature = temperature,
         feelsTemperature = feelsTemperature,
@@ -72,6 +76,8 @@ data class WeatherEntity(
         cityName = cityName,
         lat = lat,
         lon = lon,
+        icon = icon,
+        description = description,
         temperature = temperature,
         feelsTemperature = feelsTemperature,
         tempMin = tempMin,

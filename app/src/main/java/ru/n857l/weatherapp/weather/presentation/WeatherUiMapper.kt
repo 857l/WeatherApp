@@ -24,6 +24,8 @@ class WeatherUiMapper @Inject constructor(
     ): WeatherUi {
         return WeatherUi.Base(
             cityName = weatherInCity.cityName,
+            iconUrl = "https://openweathermap.org/img/wn/${weatherInCity.icon}@4x.png",
+            description = weatherInCity.description.replaceFirstChar { it.uppercase() },
             temperature = "${weatherInCity.temperature.roundToInt()}°",
             feelsTemperature = "Feels like ${weatherInCity.feelsTemperature.roundToInt()}°",
             minMaxTemperature = "↑${weatherInCity.tempMin.roundToInt()}° / ↓${weatherInCity.tempMax.roundToInt()}°",
@@ -34,8 +36,10 @@ class WeatherUiMapper @Inject constructor(
             speed = "${weatherInCity.speed} м/c",
             degree = "${weatherInCity.degree}°",
             gust = "${weatherInCity.gust}",
-            clouds = "${weatherInCity.clouds}",
+            clouds = "${weatherInCity.clouds}%",
             visibility = "${weatherInCity.visibility} м",
+            sunrise = timeWrapper.getShortTime(weatherInCity.sunrise),
+            sunset = timeWrapper.getShortTime(weatherInCity.sunset),
             time = timeWrapper.getHumanReadableTime(weatherInCity.dateTime)
         )
     }
@@ -44,6 +48,8 @@ class WeatherUiMapper @Inject constructor(
 interface TimeWrapper {
 
     fun getHumanReadableTime(timeMillis: Long): String
+
+    fun getShortTime(timeMillis: Long): String
 
     fun minutesDifference(timeMillis: Long): Boolean
 
@@ -56,6 +62,12 @@ interface TimeWrapper {
             dateFormat.timeZone = TimeZone.getDefault()
             val time = dateFormat.format(Date(timeMillis))
             return time
+        }
+
+        override fun getShortTime(timeMillis: Long): String {
+            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getDefault()
+            return dateFormat.format(Date(timeMillis))
         }
 
         override fun minutesDifference(timeMillis: Long): Boolean {

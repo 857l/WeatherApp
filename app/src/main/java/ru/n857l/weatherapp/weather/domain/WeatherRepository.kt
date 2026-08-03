@@ -35,9 +35,12 @@ interface WeatherRepository {
 
                 if (needRefresh) {
                     val cloud = cloudDataSource.weather(city.lat, city.lon)
+                    val weatherDescription = cloud.weather.firstOrNull()
 
                     val entity = WeatherEntity(
                         cityName = cloud.cityName,
+                        icon = weatherDescription?.icon ?: "01d",
+                        description = weatherDescription?.description ?: "",
                         lat = cloud.coordinates.latitude,
                         lon = cloud.coordinates.longitude,
                         temperature = cloud.main.temperature,
