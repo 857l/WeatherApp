@@ -6,4 +6,13 @@
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
     <string name="get_location">Get location</string>
+    <string name="detail_feels_like">Feels like</string>
+    <string name="detail_humidity">Humidity</string>
+    <string name="detail_wind">Wind</string>
+    <string name="detail_pressure">Pressure</string>
+    <string name="detail_visibility">Visibility</string>
+    <string name="detail_gust">Gust</string>
+    <string name="detail_clouds">Cloudiness</string>
+    <string name="detail_sunrise">Sunrise</string>
+    <string name="detail_sunset">Sunset</string>
 </resources>
