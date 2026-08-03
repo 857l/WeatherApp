@@ -35,7 +35,7 @@ class WeatherUiMapper @Inject constructor(
             humidity = "${weatherInCity.humidity}%",
             speed = "${weatherInCity.speed} м/c",
             degree = "${weatherInCity.degree}°",
-            gust = "${weatherInCity.gust}",
+            gust = "${weatherInCity.gust} м/c",
             clouds = "${weatherInCity.clouds}%",
             visibility = "${weatherInCity.visibility} м",
             sunrise = timeWrapper.getShortTime(weatherInCity.sunrise),

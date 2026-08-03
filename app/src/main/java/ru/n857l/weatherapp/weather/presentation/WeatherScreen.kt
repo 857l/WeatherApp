@@ -183,13 +183,12 @@ interface WeatherUi : Serializable {
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
                     val details = listOf(
-                        DetailItemData(Icons.Filled.Thermostat, R.string.detail_feels_like, feelsTemperature),
                         DetailItemData(Icons.Filled.WaterDrop, R.string.detail_humidity, humidity),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed м/с, $degree"),
+                        DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed, $degree"),
                         DetailItemData(Icons.Filled.Compress, R.string.detail_pressure, pressure),
                         DetailItemData(Icons.Filled.Visibility, R.string.detail_visibility, visibility),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, "$gust м/с"),
-                        DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, gust),
                         DetailItemData(Icons.Filled.WbSunny, R.string.detail_sunrise, sunrise),
                         DetailItemData(Icons.Filled.NightsStay, R.string.detail_sunset, sunset)
                     )
