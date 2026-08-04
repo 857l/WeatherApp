@@ -9,3 +9,11 @@ data object NoInternetException : DomainException() {
 data object ServiceUnavailableException : DomainException() {
     private fun readResolve(): Any = ServiceUnavailableException
 }
+
+data object UnauthorizedException : DomainException() {
+    private fun readResolve(): Any = UnauthorizedException
+}
+
+data object TooManyRequestsException : DomainException() {
+    private fun readResolve(): Any = TooManyRequestsException
+}
