@@ -51,9 +51,8 @@ import ru.n857l.weatherapp.R
 import ru.n857l.weatherapp.findcity.presentation.ErrorUi
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
 import java.io.Serializable
-
-private val SkyTop = Color(0xFF4E7FD1)
-private val SkyBottom = Color(0xFF9AC6EA)
+import ru.n857l.weatherapp.ui.theme.SkyBottom
+import ru.n857l.weatherapp.ui.theme.SkyTop
 
 @Composable
 fun WeatherScreen(

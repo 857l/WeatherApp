@@ -15,4 +15,5 @@
     <string name="detail_clouds">Cloudiness</string>
     <string name="detail_sunrise">Sunrise</string>
     <string name="detail_sunset">Sunset</string>
+    <string name="find_city_title">Find your city</string>
 </resources>

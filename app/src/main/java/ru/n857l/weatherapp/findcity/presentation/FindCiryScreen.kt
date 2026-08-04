@@ -1,9 +1,11 @@
 package ru.n857l.weatherapp.findcity.presentation
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,24 +13,39 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationCity
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.n857l.weatherapp.R
 import ru.n857l.weatherapp.findcity.domain.FoundCity
+import ru.n857l.weatherapp.ui.theme.SkyBottom
+import ru.n857l.weatherapp.ui.theme.SkyTop
 import java.io.Serializable
 
 @Composable
@@ -66,28 +83,69 @@ fun FindCityScreenUi(
     onRetryClick: () -> Unit,
     onGetLocationClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(SkyTop, SkyBottom)))
     ) {
-        Button(
-            onClick = onGetLocationClick, modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        ) {
-            Text(text = stringResource(R.string.get_location))
-        }
-        OutlinedTextField(
-            label = { Text(text = stringResource(R.string.city_name)) },
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .testTag("findCityInputField"),
-            maxLines = 1,
-            value = input,
-            onValueChange = onInputChange,
-        )
-        foundCityUi.Show(onFoundCityClick, onRetryClick)
+                .fillMaxSize()
+                .padding(horizontal = 20.dp)
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
 
+            Text(
+                text = stringResource(R.string.find_city_title),
+                fontSize = 26.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onGetLocationClick,
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(imageVector = Icons.Filled.MyLocation, contentDescription = null)
+                Text(
+                    text = stringResource(R.string.get_location),
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                label = { Text(text = stringResource(R.string.city_name)) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Filled.Search, contentDescription = null)
+                },
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("findCityInputField"),
+                maxLines = 1,
+                value = input,
+                onValueChange = onInputChange,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            foundCityUi.Show(onFoundCityClick, onRetryClick)
+        }
     }
 }
 
@@ -111,6 +169,7 @@ interface FoundCityUi : Serializable {
             ) {
                 items(foundCities) { city ->
                     CityItem(city, onClick = onFoundCityClick)
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }
@@ -152,29 +211,38 @@ fun CityItem(
     city: FoundCity,
     onClick: (FoundCity) -> Unit
 ) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .clickable { onClick(city) }
+            .clickable { onClick(city) },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+        )
     ) {
-        Text(
-            text = city.name,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = city.fullCountryName,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        HorizontalDivider()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.LocationCity,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Column(modifier = Modifier.padding(start = 12.dp)) {
+                Text(
+                    text = city.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = city.fullCountryName,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
     }
 }
 
@@ -182,11 +250,18 @@ fun CityItem(
 fun LoadingUi() {
     Box(Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator()
-            Text(text = stringResource(R.string.loading), Modifier.testTag("CircleLoading"))
+            CircularProgressIndicator(color = Color.White)
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = stringResource(R.string.loading),
+                color = Color.White,
+                modifier = Modifier.testTag("CircleLoading")
+            )
         }
     }
 }
@@ -194,11 +269,14 @@ fun LoadingUi() {
 @Composable
 fun ErrorUi(@StringRes errorId: Int, onRetryClick: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(errorId),
+            color = Color.White,
             modifier = Modifier.testTag("noInternetConnection")
         )
         Spacer(modifier = Modifier.height(24.dp))
