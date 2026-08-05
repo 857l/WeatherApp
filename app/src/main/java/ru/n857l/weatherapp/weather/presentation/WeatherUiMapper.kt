@@ -53,6 +53,8 @@ interface TimeWrapper {
 
     fun minutesDifference(timeMillis: Long): Boolean
 
+    fun getDayLabel(timeMillis: Long): String
+
     class Base @Inject constructor(
         private val minutes: Int
     ) : TimeWrapper {
@@ -72,6 +74,12 @@ interface TimeWrapper {
 
         override fun minutesDifference(timeMillis: Long): Boolean {
             return System.currentTimeMillis() - timeMillis > minutes * 60 * 1000
+        }
+
+        override fun getDayLabel(timeMillis: Long): String {
+            val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+            dateFormat.timeZone = TimeZone.getDefault()
+            return dateFormat.format(Date(timeMillis))
         }
     }
 }

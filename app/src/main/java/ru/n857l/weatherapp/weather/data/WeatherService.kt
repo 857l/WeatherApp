@@ -12,4 +12,12 @@ interface WeatherService {
         @Query("appid") apiKey: String,
         @Query("units") units: String = "metric"
     ): WeatherCloud
+
+    @GET("data/2.5/forecast")
+    suspend fun forecast(
+        @Query("lat") lat: Float,
+        @Query("lon") long: Float,
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "metric"
+    ): ForecastCloud
 }

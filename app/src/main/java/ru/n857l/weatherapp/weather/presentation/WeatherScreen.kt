@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Cloud
@@ -50,9 +48,9 @@ import coil.compose.AsyncImage
 import ru.n857l.weatherapp.R
 import ru.n857l.weatherapp.findcity.presentation.ErrorUi
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
-import java.io.Serializable
 import ru.n857l.weatherapp.ui.theme.SkyBottom
 import ru.n857l.weatherapp.ui.theme.SkyTop
+import java.io.Serializable
 
 @Composable
 fun WeatherScreen(
@@ -68,8 +66,10 @@ fun WeatherScreen(
     }
 
     val weatherScreenUi = viewModel.state.collectAsStateWithLifecycle()
+    val forecastScreenUi = viewModel.forecastState.collectAsStateWithLifecycle()
     WeatherScreenUi(
         weatherUi = weatherScreenUi.value,
+        forecastUi = forecastScreenUi.value,
         onRetryClick = viewModel::loadWeather,
     )
 }
@@ -77,6 +77,7 @@ fun WeatherScreen(
 @Composable
 fun WeatherScreenUi(
     weatherUi: WeatherUi,
+    forecastUi: ForecastUi = ForecastUi.Empty,
     onRetryClick: () -> Unit
 ) {
     Box(
@@ -86,14 +87,14 @@ fun WeatherScreenUi(
                 Brush.verticalGradient(listOf(SkyTop, SkyBottom))
             )
     ) {
-        weatherUi.Show(onRetryClick)
+        weatherUi.Show(onRetryClick, forecastUi)
     }
 }
 
 interface WeatherUi : Serializable {
 
     @Composable
-    fun Show(onRetryClick: () -> Unit) = Unit
+    fun Show(onRetryClick: () -> Unit, forecastUi: ForecastUi) = Unit
 
     data object Empty : WeatherUi {
         private fun readResolve(): Any = Empty
@@ -121,10 +122,11 @@ interface WeatherUi : Serializable {
     ) : WeatherUi {
 
         @Composable
-        override fun Show(onRetryClick: () -> Unit) {
+        override fun Show(onRetryClick: () -> Unit, forecastUi: ForecastUi) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -169,7 +171,11 @@ interface WeatherUi : Serializable {
                     color = Color.White.copy(alpha = 0.85f)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+
+                forecastUi.Show()
+
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Card(
                     modifier = Modifier
@@ -182,26 +188,37 @@ interface WeatherUi : Serializable {
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
                     val details = listOf(
+                        DetailItemData(Icons.Filled.Thermostat, R.string.detail_feels_like, feelsTemperature),
                         DetailItemData(Icons.Filled.WaterDrop, R.string.detail_humidity, humidity),
-                        DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed, $degree"),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed м/с, $degree"),
                         DetailItemData(Icons.Filled.Compress, R.string.detail_pressure, pressure),
                         DetailItemData(Icons.Filled.Visibility, R.string.detail_visibility, visibility),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, gust),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, "$gust м/с"),
+                        DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
                         DetailItemData(Icons.Filled.WbSunny, R.string.detail_sunrise, sunrise),
                         DetailItemData(Icons.Filled.NightsStay, R.string.detail_sunset, sunset)
                     )
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        items(details) { item ->
-                            DetailCard(item)
+                        details.chunked(2).forEach { rowItems ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                rowItems.forEach { item ->
+                                    DetailCard(
+                                        item = item,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                                if (rowItems.size == 1) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                }
+                            }
                         }
                     }
                 }
@@ -213,7 +230,7 @@ interface WeatherUi : Serializable {
         private fun readResolve(): Any = NoConnectionError
 
         @Composable
-        override fun Show(onRetryClick: () -> Unit) {
+        override fun Show(onRetryClick: () -> Unit, forecastUi: ForecastUi) {
             ErrorUi(R.string.no_internet_connection, onRetryClick)
         }
     }
@@ -222,7 +239,7 @@ interface WeatherUi : Serializable {
         private fun readResolve(): Any = ServiceUnavailableError
 
         @Composable
-        override fun Show(onRetryClick: () -> Unit) {
+        override fun Show(onRetryClick: () -> Unit, forecastUi: ForecastUi) {
             ErrorUi(R.string.service_unavailable, onRetryClick)
         }
     }
@@ -231,7 +248,7 @@ interface WeatherUi : Serializable {
         private fun readResolve(): Any = Loading
 
         @Composable
-        override fun Show(onRetryClick: () -> Unit) {
+        override fun Show(onRetryClick: () -> Unit, forecastUi: ForecastUi) {
             LoadingUi()
         }
     }
@@ -244,11 +261,14 @@ private data class DetailItemData(
 )
 
 @Composable
-private fun DetailCard(item: DetailItemData) {
+private fun DetailCard(item: DetailItemData, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = modifier
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -297,6 +317,13 @@ fun PreviewWeatherScreenUi() {
             sunrise = "05:12",
             sunset = "21:47"
         ),
+        forecastUi = ForecastUi.Base(
+            listOf(
+                ForecastDayUi("Пн, 5 авг", "https://openweathermap.org/img/wn/01d@2x.png", "9°", "14°"),
+                ForecastDayUi("Вт, 6 авг", "https://openweathermap.org/img/wn/02d@2x.png", "10°", "16°"),
+                ForecastDayUi("Ср, 7 авг", "https://openweathermap.org/img/wn/10d@2x.png", "8°", "12°")
+            )
+        ),
         onRetryClick = {}
     )
 }
@@ -304,11 +331,11 @@ fun PreviewWeatherScreenUi() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewNoInternetError() {
-    WeatherUi.NoConnectionError.Show { }
+    WeatherUi.NoConnectionError.Show(onRetryClick = { }, forecastUi = ForecastUi.Empty)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewLoading() {
-    WeatherUi.Loading.Show { }
+    WeatherUi.Loading.Show(onRetryClick = { }, forecastUi = ForecastUi.Empty)
 }

@@ -8,8 +8,11 @@ import dagger.hilt.android.components.ViewModelComponent
 import retrofit2.Retrofit
 import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherService
+import ru.n857l.weatherapp.weather.domain.ForecastResult
 import ru.n857l.weatherapp.weather.domain.WeatherRepository
 import ru.n857l.weatherapp.weather.domain.WeatherResult
+import ru.n857l.weatherapp.weather.presentation.ForecastUi
+import ru.n857l.weatherapp.weather.presentation.ForecastUiMapper
 import ru.n857l.weatherapp.weather.presentation.TimeWrapper
 import ru.n857l.weatherapp.weather.presentation.WeatherUi
 import ru.n857l.weatherapp.weather.presentation.WeatherUiMapper
@@ -38,4 +41,7 @@ abstract class WeatherBindModule {
 
     @Binds
     abstract fun bindTimeWrapper(wrapper: TimeWrapper.Base): TimeWrapper
+
+    @Binds
+    abstract fun bindForecastUiMapper(mapper: ForecastUiMapper): ForecastResult.Mapper<ForecastUi>
 }
