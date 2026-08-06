@@ -45,8 +45,8 @@ interface WeatherRepository {
                         cityName = cloud.cityName,
                         icon = weatherDescription?.icon ?: "01d",
                         description = weatherDescription?.description ?: "",
-                        lat = cloud.coordinates.latitude,
-                        lon = cloud.coordinates.longitude,
+                        lat = city.lat,
+                        lon = city.lon,
                         temperature = cloud.main.temperature,
                         feelsTemperature = cloud.main.feelsTemperature,
                         tempMin = cloud.main.tempMin,
@@ -60,7 +60,7 @@ interface WeatherRepository {
                         gust = cloud.wind.gust,
                         clouds = cloud.clouds.clouds,
                         visibility = cloud.visibility,
-                        dateTime = cloud.dateTime * 1000L,
+                        dateTime = System.currentTimeMillis(),
                         sunrise = cloud.sun.sunrise * 1000L,
                         sunset = cloud.sun.sunset * 1000L
                     )

@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import ru.n857l.weatherapp.core.RunAsync
 import ru.n857l.weatherapp.findcity.presentation.QueryEvent
 import ru.n857l.weatherapp.weather.domain.ForecastResult
@@ -30,6 +32,7 @@ class WeatherViewModel @Inject constructor(
     init {
         loadWeather()
         loadForecast()
+        scheduleWeatherAutoRefresh()
     }
 
     fun loadWeather() {
@@ -52,8 +55,28 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
+    private fun scheduleWeatherAutoRefresh() {
+        viewModelScope.launch {
+            while (true) {
+                delay(REFRESH_INTERVAL_MILLIS)
+                refreshWeatherSilently()
+            }
+        }
+    }
+
+    private fun refreshWeatherSilently() {
+        runAsync.runAsync(viewModelScope, {
+            val result = repository.weather()
+            result.map(mapper)
+        }) { refreshedUi ->
+            if (refreshedUi is WeatherUi.Base)
+                savedStateHandle[KEY] = refreshedUi
+        }
+    }
+
     companion object {
         private const val KEY = "WeatherScreenUiKey"
         private const val FORECAST_KEY = "ForecastScreenUiKey"
+        private const val REFRESH_INTERVAL_MILLIS = 5 * 60 * 1000L
     }
 }
