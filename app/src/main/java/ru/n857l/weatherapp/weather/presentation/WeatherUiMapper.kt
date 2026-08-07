@@ -24,7 +24,7 @@ class WeatherUiMapper @Inject constructor(
     ): WeatherUi {
         return WeatherUi.Base(
             cityName = weatherInCity.cityName,
-            iconUrl = "https://openweathermap.org/img/wn/${weatherInCity.icon}@4x.png",
+            iconUrl = weatherIconUrl(weatherInCity.icon, size = 4),
             description = weatherInCity.description.replaceFirstChar { it.uppercase() },
             temperature = "${weatherInCity.temperature.roundToInt()}°",
             feelsTemperature = "${weatherInCity.feelsTemperature.roundToInt()}°",

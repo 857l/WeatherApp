@@ -26,14 +26,14 @@ class ForecastUiMapper @Inject constructor(
 
     private fun ForecastDay.toForecastDayUi(): ForecastDayUi = ForecastDayUi(
         dayLabel = timeWrapper.getDayLabel(date),
-        iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png",
+        iconUrl = weatherIconUrl(icon),
         tempMin = "${tempMin.roundToInt()}°",
         tempMax = "${tempMax.roundToInt()}°"
     )
 
     private fun ForecastHour.toHourUi(): HourUi = HourUi(
         time = timeWrapper.getShortTime(dateTime),
-        iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png",
+        iconUrl = weatherIconUrl(icon),
         temp = "${temperature.roundToInt()}°",
         tempValue = temperature
     )
