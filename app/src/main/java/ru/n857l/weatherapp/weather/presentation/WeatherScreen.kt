@@ -162,14 +162,6 @@ interface WeatherUi : Serializable {
                     color = Color.White
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = "$minMaxTemperature  •  $feelsTemperature",
-                    fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.85f)
-                )
-
                 Spacer(modifier = Modifier.height(20.dp))
 
                 forecastUi.Show()
