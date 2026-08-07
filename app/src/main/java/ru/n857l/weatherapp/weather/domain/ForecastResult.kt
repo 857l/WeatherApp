@@ -12,9 +12,7 @@ interface ForecastResult {
 
         fun mapEmpty(): T
 
-        fun mapForecast(
-            days: List<ForecastDay>
-        ): T
+        fun mapForecast(data: ForecastData): T
 
         fun mapNoInternetError(): T
 
@@ -22,11 +20,11 @@ interface ForecastResult {
     }
 
     data class Base(
-        private val days: List<ForecastDay>
+        private val data: ForecastData
     ) : ForecastResult {
 
         override fun <T : Serializable> map(mapper: Mapper<T>): T {
-            return mapper.mapForecast(days)
+            return mapper.mapForecast(data)
         }
     }
 

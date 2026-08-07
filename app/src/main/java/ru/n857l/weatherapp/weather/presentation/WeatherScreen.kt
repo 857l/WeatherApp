@@ -318,7 +318,15 @@ fun PreviewWeatherScreenUi() {
             sunset = "21:47"
         ),
         forecastUi = ForecastUi.Base(
-            listOf(
+            hours = listOf(
+                HourUi("06:00", "https://openweathermap.org/img/wn/01d@2x.png", "17°", 17f),
+                HourUi("09:00", "https://openweathermap.org/img/wn/02d@2x.png", "18°", 18f),
+                HourUi("12:00", "https://openweathermap.org/img/wn/03d@2x.png", "20°", 20f),
+                HourUi("15:00", "https://openweathermap.org/img/wn/04d@2x.png", "20°", 20f),
+                HourUi("18:00", "https://openweathermap.org/img/wn/10d@2x.png", "18°", 18f),
+                HourUi("21:00", "https://openweathermap.org/img/wn/01n@2x.png", "15°", 15f)
+            ),
+            days = listOf(
                 ForecastDayUi("Пн, 5 авг", "https://openweathermap.org/img/wn/01d@2x.png", "9°", "14°"),
                 ForecastDayUi("Вт, 6 авг", "https://openweathermap.org/img/wn/02d@2x.png", "10°", "16°"),
                 ForecastDayUi("Ср, 7 авг", "https://openweathermap.org/img/wn/10d@2x.png", "8°", "12°")

@@ -60,7 +60,7 @@ interface TimeWrapper {
     ) : TimeWrapper {
 
         override fun getHumanReadableTime(timeMillis: Long): String {
-            val dateFormat = SimpleDateFormat("HH:mm dd MMM yyyy", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("HH:mm d MMM yyyy", Locale.getDefault())
             dateFormat.timeZone = TimeZone.getDefault()
             val time = dateFormat.format(Date(timeMillis))
             return time

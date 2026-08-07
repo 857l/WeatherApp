@@ -8,8 +8,25 @@ import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherDao
 import ru.n857l.weatherapp.weather.data.WeatherEntity
 import ru.n857l.weatherapp.weather.presentation.TimeWrapper
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.abs
+
+private val localDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+    timeZone = TimeZone.getDefault()
+}
+private val localHourFormat = SimpleDateFormat("HH", Locale.getDefault()).apply {
+    timeZone = TimeZone.getDefault()
+}
+
+private fun ForecastItemCloud.localDateKey(): String =
+    localDateFormat.format(Date(dateTime * 1000L))
+
+private fun ForecastItemCloud.localHour(): Int =
+    localHourFormat.format(Date(dateTime * 1000L)).toInt()
 
 interface WeatherRepository {
 
@@ -84,21 +101,20 @@ interface WeatherRepository {
                 val cloud = cloudDataSource.forecast(city.lat, city.lon)
 
                 val days = cloud.list
-                    .groupBy { item -> item.dateTimeText.substring(0, 10) }
+                    .groupBy { item -> item.localDateKey() }
                     .values
                     .map { itemsForDay -> itemsForDay.toForecastDay() }
 
-                return ForecastResult.Base(days)
+                val hours = cloud.list.toTodayHours()
+
+                return ForecastResult.Base(ForecastData(hours = hours, days = days))
             } catch (e: DomainException) {
                 return ForecastResult.Failed(e)
             }
         }
 
         private fun List<ForecastItemCloud>.toForecastDay(): ForecastDay {
-            val noonItem = minByOrNull { item ->
-                val hour = item.dateTimeText.substring(11, 13).toInt()
-                abs(hour - 12)
-            } ?: first()
+            val noonItem = minByOrNull { item -> abs(item.localHour() - 12) } ?: first()
 
             val weatherDescription = noonItem.weather.firstOrNull()
 
@@ -109,6 +125,26 @@ interface WeatherRepository {
                 tempMin = minOf { item -> item.main.tempMin },
                 tempMax = maxOf { item -> item.main.tempMax }
             )
+        }
+
+        private fun List<ForecastItemCloud>.toTodayHours(): List<ForecastHour> {
+            val todayKey = localDateFormat.format(Date())
+            val tomorrowKey = localDateFormat.format(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000L))
+
+            return this
+                .filter { item ->
+                    (item.localDateKey() == todayKey && item.localHour() >= 6) ||
+                            (item.localDateKey() == tomorrowKey && item.localHour() <= 6)
+                }
+                .map { item ->
+                    val weatherDescription = item.weather.firstOrNull()
+                    ForecastHour(
+                        dateTime = item.dateTime * 1000L,
+                        icon = weatherDescription?.icon ?: "01d",
+                        description = weatherDescription?.description ?: "",
+                        temperature = item.main.temperature
+                    )
+                }
         }
     }
 }

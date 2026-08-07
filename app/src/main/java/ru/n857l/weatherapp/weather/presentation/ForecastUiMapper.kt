@@ -1,6 +1,8 @@
 package ru.n857l.weatherapp.weather.presentation
 
+import ru.n857l.weatherapp.weather.domain.ForecastData
 import ru.n857l.weatherapp.weather.domain.ForecastDay
+import ru.n857l.weatherapp.weather.domain.ForecastHour
 import ru.n857l.weatherapp.weather.domain.ForecastResult
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -15,9 +17,10 @@ class ForecastUiMapper @Inject constructor(
 
     override fun mapServiceUnavailableError(): ForecastUi = ForecastUi.ServiceUnavailableError
 
-    override fun mapForecast(days: List<ForecastDay>): ForecastUi {
+    override fun mapForecast(data: ForecastData): ForecastUi {
         return ForecastUi.Base(
-            days.map { day -> day.toForecastDayUi() }
+            hours = data.hours.map { hour -> hour.toHourUi() },
+            days = data.days.map { day -> day.toForecastDayUi() }
         )
     }
 
@@ -26,5 +29,12 @@ class ForecastUiMapper @Inject constructor(
         iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png",
         tempMin = "${tempMin.roundToInt()}°",
         tempMax = "${tempMax.roundToInt()}°"
+    )
+
+    private fun ForecastHour.toHourUi(): HourUi = HourUi(
+        time = timeWrapper.getShortTime(dateTime),
+        iconUrl = "https://openweathermap.org/img/wn/${icon}@2x.png",
+        temp = "${temperature.roundToInt()}°",
+        tempValue = temperature
     )
 }
