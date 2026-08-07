@@ -32,7 +32,7 @@ class WeatherViewModel @Inject constructor(
     init {
         loadWeather()
         loadForecast()
-        scheduleWeatherAutoRefresh()
+        scheduleAutoRefresh()
     }
 
     fun loadWeather() {
@@ -55,11 +55,12 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private fun scheduleWeatherAutoRefresh() {
+    private fun scheduleAutoRefresh() {
         viewModelScope.launch {
             while (true) {
                 delay(REFRESH_INTERVAL_MILLIS)
                 refreshWeatherSilently()
+                refreshForecastSilently()
             }
         }
     }
@@ -71,6 +72,16 @@ class WeatherViewModel @Inject constructor(
         }) { refreshedUi ->
             if (refreshedUi is WeatherUi.Base)
                 savedStateHandle[KEY] = refreshedUi
+        }
+    }
+
+    private fun refreshForecastSilently() {
+        runAsync.runAsync(viewModelScope, {
+            val result = repository.forecast()
+            result.map(forecastMapper)
+        }) { refreshedUi ->
+            if (refreshedUi is ForecastUi.Base)
+                savedStateHandle[FORECAST_KEY] = refreshedUi
         }
     }
 
