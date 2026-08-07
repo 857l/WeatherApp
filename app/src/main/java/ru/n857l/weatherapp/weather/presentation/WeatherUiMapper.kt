@@ -27,7 +27,7 @@ class WeatherUiMapper @Inject constructor(
             iconUrl = "https://openweathermap.org/img/wn/${weatherInCity.icon}@4x.png",
             description = weatherInCity.description.replaceFirstChar { it.uppercase() },
             temperature = "${weatherInCity.temperature.roundToInt()}°",
-            feelsTemperature = "Feels like ${weatherInCity.feelsTemperature.roundToInt()}°",
+            feelsTemperature = "${weatherInCity.feelsTemperature.roundToInt()}°",
             minMaxTemperature = "↑${weatherInCity.tempMin.roundToInt()}° / ↓${weatherInCity.tempMax.roundToInt()}°",
             pressure = "${weatherInCity.pressure} мм рт. ст.",
             seaLevelPressure = "${weatherInCity.seaLevelPressure} мм рт. ст.",

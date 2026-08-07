@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.NightsStay
 import androidx.compose.material.icons.filled.Thermostat
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Card
@@ -190,10 +189,9 @@ interface WeatherUi : Serializable {
                     val details = listOf(
                         DetailItemData(Icons.Filled.Thermostat, R.string.detail_feels_like, feelsTemperature),
                         DetailItemData(Icons.Filled.WaterDrop, R.string.detail_humidity, humidity),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed м/с, $degree"),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed, $degree"),
                         DetailItemData(Icons.Filled.Compress, R.string.detail_pressure, pressure),
-                        DetailItemData(Icons.Filled.Visibility, R.string.detail_visibility, visibility),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, "$gust м/с"),
+                        DetailItemData(Icons.Filled.Air, R.string.detail_gust, gust),
                         DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
                         DetailItemData(Icons.Filled.WbSunny, R.string.detail_sunrise, sunrise),
                         DetailItemData(Icons.Filled.NightsStay, R.string.detail_sunset, sunset)
