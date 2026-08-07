@@ -3,6 +3,8 @@ package ru.n857l.weatherapp.weather.domain
 import ru.n857l.weatherapp.findcity.data.FindCityDao
 import ru.n857l.weatherapp.findcity.domain.DomainException
 import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
+import ru.n857l.weatherapp.weather.data.ForecastCacheEntity
+import ru.n857l.weatherapp.weather.data.ForecastDao
 import ru.n857l.weatherapp.weather.data.ForecastItemCloud
 import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherDao
@@ -37,6 +39,7 @@ interface WeatherRepository {
     class Base @Inject constructor(
         private val findCityDao: FindCityDao,
         private val weatherDao: WeatherDao,
+        private val forecastDao: ForecastDao,
         private val cloudDataSource: WeatherCloudDataSource,
         private val timeWrapper: TimeWrapper
     ) : WeatherRepository {
@@ -98,16 +101,39 @@ interface WeatherRepository {
                 val city = findCityDao.getCity()
                     ?: return ForecastResult.Failed(ServiceUnavailableException)
 
-                val cloud = cloudDataSource.forecast(city.lat, city.lon)
+                val cached = forecastDao.getForecast()
 
-                val days = cloud.list
-                    .groupBy { item -> item.localDateKey() }
-                    .values
-                    .map { itemsForDay -> itemsForDay.toForecastDay() }
+                val needRefresh =
+                    cached == null ||
+                            cached.lat != city.lat ||
+                            cached.lon != city.lon ||
+                            timeWrapper.minutesDifference(cached.dateTime)
 
-                val hours = cloud.list.toTodayHours()
+                if (needRefresh) {
+                    val cloud = cloudDataSource.forecast(city.lat, city.lon)
 
-                return ForecastResult.Base(ForecastData(hours = hours, days = days))
+                    val days = cloud.list
+                        .groupBy { item -> item.localDateKey() }
+                        .values
+                        .map { itemsForDay -> itemsForDay.toForecastDay() }
+
+                    val hours = cloud.list.toTodayHours()
+
+                    val data = ForecastData(hours = hours, days = days)
+
+                    forecastDao.saveForecast(
+                        ForecastCacheEntity.from(
+                            lat = city.lat,
+                            lon = city.lon,
+                            dateTime = System.currentTimeMillis(),
+                            data = data
+                        )
+                    )
+
+                    return ForecastResult.Base(data)
+                }
+
+                return ForecastResult.Base(cached!!.toDomain())
             } catch (e: DomainException) {
                 return ForecastResult.Failed(e)
             }

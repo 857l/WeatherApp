@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.n857l.weatherapp.findcity.data.FindCityDao
+import ru.n857l.weatherapp.weather.data.ForecastDao
 import ru.n857l.weatherapp.weather.data.WeatherDao
 import javax.inject.Singleton
 
@@ -32,4 +33,6 @@ object DatabaseModule {
     fun provideFindCityDao(db: AppDatabase): FindCityDao = db.findCityDao()
     @Provides
     fun provideWeatherDao(db: AppDatabase): WeatherDao = db.weatherDao()
+    @Provides
+    fun provideForecastDao(db: AppDatabase): ForecastDao = db.forecastDao()
 }
