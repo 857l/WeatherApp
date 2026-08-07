@@ -77,6 +77,6 @@ class WeatherViewModel @Inject constructor(
     companion object {
         private const val KEY = "WeatherScreenUiKey"
         private const val FORECAST_KEY = "ForecastScreenUiKey"
-        private const val REFRESH_INTERVAL_MILLIS = 5 * 60 * 1000L
+        private const val REFRESH_INTERVAL_MILLIS = 1 * 60 * 1000L
     }
 }
