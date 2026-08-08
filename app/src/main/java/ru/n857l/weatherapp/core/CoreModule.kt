@@ -42,5 +42,5 @@ class CoreModule {
         .build()
 
     @Provides
-    fun provideMinutes(): Int = 15
+    fun provideMinutes(): Int = 14
 }
