@@ -40,14 +40,12 @@ class WeatherUiMapper @Inject constructor(
             visibility = "${weatherInCity.visibility} м",
             sunrise = timeWrapper.getShortTime(weatherInCity.sunrise),
             sunset = timeWrapper.getShortTime(weatherInCity.sunset),
-            time = timeWrapper.getHumanReadableTime(weatherInCity.dateTime)
+            dateTime = weatherInCity.dateTime
         )
     }
 }
 
 interface TimeWrapper {
-
-    fun getHumanReadableTime(timeMillis: Long): String
 
     fun getShortTime(timeMillis: Long): String
 
@@ -58,13 +56,6 @@ interface TimeWrapper {
     class Base @Inject constructor(
         private val minutes: Int
     ) : TimeWrapper {
-
-        override fun getHumanReadableTime(timeMillis: Long): String {
-            val dateFormat = SimpleDateFormat("HH:mm d MMM yyyy", Locale.getDefault())
-            dateFormat.timeZone = TimeZone.getDefault()
-            val time = dateFormat.format(Date(timeMillis))
-            return time
-        }
 
         override fun getShortTime(timeMillis: Long): String {
             val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())

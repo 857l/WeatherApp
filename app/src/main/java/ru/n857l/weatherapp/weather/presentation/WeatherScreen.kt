@@ -1,5 +1,7 @@
 package ru.n857l.weatherapp.weather.presentation
 
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +32,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,12 +51,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import kotlinx.coroutines.delay
 import ru.n857l.weatherapp.R
 import ru.n857l.weatherapp.findcity.presentation.ErrorUi
 import ru.n857l.weatherapp.findcity.presentation.LoadingUi
 import ru.n857l.weatherapp.ui.theme.SkyBottom
 import ru.n857l.weatherapp.ui.theme.SkyTop
 import java.io.Serializable
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun WeatherScreen(
@@ -117,7 +127,7 @@ interface WeatherUi : Serializable {
         val visibility: String,
         val sunrise: String,
         val sunset: String,
-        val time: String
+        val dateTime: Long
     ) : WeatherUi {
 
         @Composable
@@ -138,7 +148,7 @@ interface WeatherUi : Serializable {
                     color = Color.White
                 )
                 Text(
-                    text = time,
+                    text = liveTimeLabel(),
                     fontSize = 14.sp,
                     color = Color.White.copy(alpha = 0.8f)
                 )
@@ -283,6 +293,26 @@ private fun DetailCard(item: DetailItemData, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun liveTimeLabel(): String {
+    var label by remember { mutableStateOf(formatCurrentTime()) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            label = formatCurrentTime()
+            delay(60_000L)
+        }
+    }
+
+    return label
+}
+
+private fun formatCurrentTime(): String {
+    val dateFormat = SimpleDateFormat("HH:mm d MMM yyyy", Locale.getDefault())
+    dateFormat.timeZone = TimeZone.getDefault()
+    return dateFormat.format(Date())
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewWeatherScreenUi() {
@@ -303,7 +333,7 @@ fun PreviewWeatherScreenUi() {
             clouds = "12",
             visibility = "10000 м",
             minMaxTemperature = "↑14° / ↓9°",
-            time = "12:11",
+            dateTime = System.currentTimeMillis(),
             sunrise = "05:12",
             sunset = "21:47"
         ),
