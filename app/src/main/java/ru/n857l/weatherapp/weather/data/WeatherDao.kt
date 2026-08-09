@@ -28,8 +28,8 @@ data class WeatherEntity(
     val cityName: String,
     val icon: String,
     val description: String,
-    val lat: Float,
-    val lon: Float,
+    override val lat: Float,
+    override val lon: Float,
     val temperature: Float,
     val feelsTemperature: Float,
     val tempMin: Float,
@@ -43,10 +43,10 @@ data class WeatherEntity(
     val gust: Float,
     val clouds: Int,
     val visibility: Int,
-    val dateTime: Long,
+    override val dateTime: Long,
     val sunrise: Long,
     val sunset: Long
-) {
+) : LocationCache {
 
     fun toDomain(): WeatherInCity = WeatherInCity(
         lat = lat,

@@ -1,11 +1,13 @@
 package ru.n857l.weatherapp.weather.domain
 
 import ru.n857l.weatherapp.findcity.data.FindCityDao
+import ru.n857l.weatherapp.findcity.data.FindCityEntity
 import ru.n857l.weatherapp.findcity.domain.DomainException
 import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
 import ru.n857l.weatherapp.weather.data.ForecastCacheEntity
 import ru.n857l.weatherapp.weather.data.ForecastDao
 import ru.n857l.weatherapp.weather.data.ForecastItemCloud
+import ru.n857l.weatherapp.weather.data.LocationCache
 import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherDao
 import ru.n857l.weatherapp.weather.data.WeatherEntity
@@ -44,6 +46,12 @@ interface WeatherRepository {
         private val timeWrapper: TimeWrapper
     ) : WeatherRepository {
 
+        private fun needsRefresh(cached: LocationCache?, city: FindCityEntity): Boolean =
+            cached == null ||
+                    cached.lat != city.lat ||
+                    cached.lon != city.lon ||
+                    timeWrapper.minutesDifference(cached.dateTime)
+
         override suspend fun weather(): WeatherResult {
             try {
                 val city = findCityDao.getCity()
@@ -51,11 +59,7 @@ interface WeatherRepository {
 
                 val cached = weatherDao.getWeather()
 
-                val needRefresh =
-                    cached == null ||
-                            cached.lat != city.lat ||
-                            cached.lon != city.lon ||
-                            timeWrapper.minutesDifference(cached.dateTime)
+                val needRefresh = needsRefresh(cached, city)
 
                 if (needRefresh) {
                     val cloud = cloudDataSource.weather(city.lat, city.lon)
@@ -103,11 +107,7 @@ interface WeatherRepository {
 
                 val cached = forecastDao.getForecast()
 
-                val needRefresh =
-                    cached == null ||
-                            cached.lat != city.lat ||
-                            cached.lon != city.lon ||
-                            timeWrapper.minutesDifference(cached.dateTime)
+                val needRefresh = needsRefresh(cached, city)
 
                 if (needRefresh) {
                     val cloud = cloudDataSource.forecast(city.lat, city.lon)

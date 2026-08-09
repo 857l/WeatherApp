@@ -26,12 +26,12 @@ interface ForecastDao {
 data class ForecastCacheEntity(
     @PrimaryKey
     val id: Int = 0,
-    val lat: Float,
-    val lon: Float,
-    val dateTime: Long,
+    override val lat: Float,
+    override val lon: Float,
+    override val dateTime: Long,
     val hoursJson: String,
     val daysJson: String
-) {
+) : LocationCache {
 
     fun toDomain(): ForecastData {
         val gson = Gson()

@@ -16,4 +16,7 @@
     <string name="detail_sunrise">Sunrise</string>
     <string name="detail_sunset">Sunset</string>
     <string name="find_city_title">Find your city</string>
+    <string name="unit_pressure">%1$d мм рт. ст.</string>
+    <string name="unit_speed">%1$s м/с</string>
+    <string name="unit_visibility">%1$d м</string>
 </resources>
