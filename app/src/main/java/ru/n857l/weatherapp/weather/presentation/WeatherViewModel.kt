@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
 import ru.n857l.weatherapp.core.RunAsync
 import ru.n857l.weatherapp.findcity.presentation.QueryEvent
 import ru.n857l.weatherapp.weather.domain.ForecastResult
@@ -56,12 +57,19 @@ class WeatherViewModel @Inject constructor(
     }
 
     private fun scheduleAutoRefresh() {
-        viewModelScope.launch {
-            while (true) {
-                delay(REFRESH_INTERVAL_MILLIS)
-                refreshWeatherSilently()
-                refreshForecastSilently()
-            }
+        runAsync.runFlow(
+            scope = viewModelScope,
+            flow = tickerFlow(REFRESH_INTERVAL_MILLIS)
+        ) {
+            refreshWeatherSilently()
+            refreshForecastSilently()
+        }
+    }
+
+    private fun tickerFlow(intervalMillis: Long): Flow<Unit> = flow {
+        while (true) {
+            delay(intervalMillis)
+            emit(Unit)
         }
     }
 
