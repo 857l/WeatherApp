@@ -118,6 +118,11 @@ class ScenarioTest {
         runAsync.completeAllPending()
         weatherPage.assertCityName("Moscow")
         weatherPage.assertWeatherDisplayed("10°")
+
+        weatherRepository.weatherResult = WeatherResult.Base(sampleWeatherInCity().copy(temperature = 15f))
+        runAsync.tick()
+        runAsync.completeAllPending()
+        weatherPage.assertWeatherDisplayed("15°")
     }
 
     private fun sampleWeatherInCity() = WeatherInCity(

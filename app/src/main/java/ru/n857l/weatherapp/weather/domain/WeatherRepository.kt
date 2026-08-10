@@ -154,13 +154,16 @@ interface WeatherRepository {
         }
 
         private fun List<ForecastItemCloud>.toTodayHours(): List<ForecastHour> {
-            val todayKey = localDateFormat.format(Date())
-            val tomorrowKey = localDateFormat.format(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000L))
+            val now = System.currentTimeMillis()
+            val todayKey = localDateFormat.format(Date(now))
+            val tomorrowKey = localDateFormat.format(Date(now + 24 * 60 * 60 * 1000L))
 
             return this
                 .filter { item ->
-                    (item.localDateKey() == todayKey && item.localHour() >= 6) ||
-                            (item.localDateKey() == tomorrowKey && item.localHour() <= 6)
+                    val itemMillis = item.dateTime * 1000L
+                    itemMillis >= now &&
+                            ((item.localDateKey() == todayKey && item.localHour() >= 6) ||
+                                    (item.localDateKey() == tomorrowKey && item.localHour() <= 6))
                 }
                 .map { item ->
                     val weatherDescription = item.weather.firstOrNull()

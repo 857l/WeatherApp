@@ -129,13 +129,13 @@ class WeatherRepositoryTest {
     @Test
     fun `hourly strip keeps only items from 06 00 today to 06 00 tomorrow`() = runBlocking {
         findCityDao.cityToReturn = savedCity
+        val stillAheadToday = anIncludedTodayHour()
         cloudDataSource.forecastToReturn = ForecastCloud(
             list = listOf(
-                forecastItem(todayAt(hour = 5)),     // сегодня до 6 утра — не должно попасть
-                forecastItem(todayAt(hour = 6)),     // сегодня ровно в 6 — граница, должно попасть
-                forecastItem(todayAt(hour = 23)),    // сегодня поздно вечером — должно попасть
-                forecastItem(tomorrowAt(hour = 6)),  // завтра ровно в 6 — граница, должно попасть
-                forecastItem(tomorrowAt(hour = 7))   // завтра позже 6 утра — не должно попасть
+                forecastItem(todayAt(hour = 5)),      // сегодня до 6 утра — не должно попасть
+                forecastItem(stillAheadToday),        // сегодня, ещё впереди — должно попасть
+                forecastItem(tomorrowAt(hour = 6)),   // завтра ровно в 6 — граница, должно попасть
+                forecastItem(tomorrowAt(hour = 7))    // завтра позже 6 утра — не должно попасть
             ),
             city = ForecastCity(name = "Moscow")
         )
@@ -144,10 +144,38 @@ class WeatherRepositoryTest {
         val data = result.map(ForecastDataMapper).value
 
         val includedHours = data.hours.map { it.dateTime }
-        assertEquals(3, includedHours.size)
-        assertTrue(includedHours.contains(todayAt(hour = 6) * 1000L))
-        assertTrue(includedHours.contains(todayAt(hour = 23) * 1000L))
+        assertEquals(2, includedHours.size)
+        assertTrue(includedHours.contains(stillAheadToday * 1000L))
         assertTrue(includedHours.contains(tomorrowAt(hour = 6) * 1000L))
+    }
+    
+    @Test
+    fun `hourly strip excludes hours that have already passed`() = runBlocking {
+        findCityDao.cityToReturn = savedCity
+        val alreadyPassedToday = todayAt(hour = 6)
+        val stillAheadToday = anIncludedTodayHour()
+
+        cloudDataSource.forecastToReturn = ForecastCloud(
+            list = listOf(
+                forecastItem(alreadyPassedToday),
+                forecastItem(stillAheadToday)
+            ),
+            city = ForecastCity(name = "Moscow")
+        )
+
+        val result = repository.forecast()
+        val data = result.map(ForecastDataMapper).value
+
+        assertEquals(1, data.hours.size)
+        assertEquals(stillAheadToday * 1000L, data.hours.first().dateTime)
+    }
+
+    private fun nowPlusHours(hours: Int): Long =
+        (System.currentTimeMillis() + hours * 60 * 60 * 1000L) / 1000L
+
+    private fun anIncludedTodayHour(): Long {
+        val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        return if (currentHour < 6) todayAt(hour = 12) else nowPlusHours(1)
     }
 
     private fun forecastItem(epochSeconds: Long) = ForecastItemCloud(
@@ -166,6 +194,7 @@ class WeatherRepositoryTest {
         dateTimeText = ""
     )
 
+    // Возвращает "сегодня в hour:00" в секундах — так же, как это отдаёт OpenWeatherMap.
     private fun todayAt(hour: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -175,6 +204,7 @@ class WeatherRepositoryTest {
         return calendar.timeInMillis / 1000
     }
 
+    // То же самое, но на день вперёд.
     private fun tomorrowAt(hour: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, 1)
