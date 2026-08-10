@@ -1,13 +1,10 @@
 package ru.n857l.weatherapp.findcity
 
 import androidx.lifecycle.SavedStateHandle
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import ru.n857l.weatherapp.core.RunAsync
+import ru.n857l.weatherapp.FakeRunAsync
 import ru.n857l.weatherapp.findcity.domain.FindCityRepository
 import ru.n857l.weatherapp.findcity.domain.FindCityResult
 import ru.n857l.weatherapp.findcity.domain.FoundCity
@@ -15,7 +12,7 @@ import ru.n857l.weatherapp.core.NoInternetException
 import ru.n857l.weatherapp.findcity.presentation.FindCityUiMapper
 import ru.n857l.weatherapp.findcity.presentation.FindCityViewModel
 import ru.n857l.weatherapp.findcity.presentation.FoundCityUi
-import ru.n857l.weatherapp.findcity.presentation.QueryEvent
+
 
 class FindCityViewModelTest {
 
@@ -121,51 +118,5 @@ private class FakeFindCityRepository : FindCityRepository {
     override suspend fun save(lat: Double, lon: Double) {
         savedLat = lat
         savedLon = lon
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-private class FakeRunAsync : RunAsync<QueryEvent> {
-
-    private var debounceBackground: (suspend (QueryEvent) -> Any)? = null
-    private var debounceUi: ((Any) -> Unit)? = null
-    private var debouncedResult: Any? = null
-
-    override fun <T : Any> runAsync(
-        scope: CoroutineScope,
-        background: suspend () -> T,
-        ui: (T) -> Unit
-    ) {
-        val result = runBlocking { background() }
-        ui(result)
-    }
-
-    override fun <T : Any> debounce(
-        scope: CoroutineScope,
-        background: suspend (QueryEvent) -> T,
-        ui: (T) -> Unit
-    ) {
-        debounceBackground = background as suspend (QueryEvent) -> Any
-        debounceUi = ui as (Any) -> Unit
-    }
-
-    override fun emit(value: QueryEvent) {
-        val background = debounceBackground ?: return
-        debouncedResult = runBlocking { background(value) }
-    }
-
-    override fun <T : Any> runFlow(
-        scope: CoroutineScope,
-        flow: Flow<T>,
-        onEach: suspend (T) -> Unit
-    ) {
-        // FindCityViewModel этим не пользуется.
-    }
-
-    fun deliverDebouncedResult() {
-        debouncedResult?.let {
-            debounceUi?.invoke(it)
-            debouncedResult = null
-        }
     }
 }
