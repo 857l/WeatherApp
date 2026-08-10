@@ -8,12 +8,12 @@ import ru.n857l.weatherapp.findcity.FakeFindCityDao
 import ru.n857l.weatherapp.findcity.data.FindCityCloudDataSource
 import ru.n857l.weatherapp.findcity.data.FindCityEntity
 import ru.n857l.weatherapp.findcity.data.FoundCityCloud
-import ru.n857l.weatherapp.findcity.domain.DomainException
+import ru.n857l.weatherapp.core.DomainException
 import ru.n857l.weatherapp.findcity.domain.FindCityRepository
 import ru.n857l.weatherapp.findcity.domain.FindCityResult
 import ru.n857l.weatherapp.findcity.domain.FoundCity
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
-import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
+import ru.n857l.weatherapp.core.NoInternetException
+import ru.n857l.weatherapp.core.ServiceUnavailableException
 
 class FindCityRepositoryTest {
 

@@ -2,8 +2,8 @@ package ru.n857l.weatherapp.weather.domain
 
 import ru.n857l.weatherapp.findcity.data.FindCityDao
 import ru.n857l.weatherapp.findcity.data.FindCityEntity
-import ru.n857l.weatherapp.findcity.domain.DomainException
-import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
+import ru.n857l.weatherapp.core.DomainException
+import ru.n857l.weatherapp.core.ServiceUnavailableException
 import ru.n857l.weatherapp.weather.data.ForecastCacheEntity
 import ru.n857l.weatherapp.weather.data.ForecastDao
 import ru.n857l.weatherapp.weather.data.ForecastItemCloud

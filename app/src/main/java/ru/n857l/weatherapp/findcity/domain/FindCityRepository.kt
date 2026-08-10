@@ -1,5 +1,6 @@
 package ru.n857l.weatherapp.findcity.domain
 
+import ru.n857l.weatherapp.core.DomainException
 import ru.n857l.weatherapp.findcity.data.FindCityCloudDataSource
 import ru.n857l.weatherapp.findcity.data.FindCityDao
 import ru.n857l.weatherapp.findcity.data.FindCityEntity

@@ -1,9 +1,5 @@
 package ru.n857l.weatherapp.core
 
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
-import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
-import ru.n857l.weatherapp.findcity.domain.TooManyRequestsException
-import ru.n857l.weatherapp.findcity.domain.UnauthorizedException
 import retrofit2.HttpException
 import java.io.IOException
 

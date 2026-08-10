@@ -1,5 +1,7 @@
 package ru.n857l.weatherapp.findcity.domain
 
+import ru.n857l.weatherapp.core.DomainException
+import ru.n857l.weatherapp.core.NoInternetException
 import java.io.Serializable
 
 interface FindCityResult {

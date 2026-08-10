@@ -8,8 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import ru.n857l.weatherapp.findcity.FakeFindCityDao
 import ru.n857l.weatherapp.findcity.data.FindCityEntity
-import ru.n857l.weatherapp.findcity.domain.DomainException
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
+import ru.n857l.weatherapp.core.DomainException
+import ru.n857l.weatherapp.core.NoInternetException
 import ru.n857l.weatherapp.weather.data.Clouds
 import ru.n857l.weatherapp.weather.data.Coordinates
 import ru.n857l.weatherapp.weather.data.ForecastCacheEntity

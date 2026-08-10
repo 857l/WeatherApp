@@ -1,4 +1,4 @@
-package ru.n857l.weatherapp.findcity.domain
+package ru.n857l.weatherapp.core
 
 sealed class DomainException : Exception()
 

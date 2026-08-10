@@ -1,7 +1,7 @@
 package ru.n857l.weatherapp.weather.domain
 
-import ru.n857l.weatherapp.findcity.domain.DomainException
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
+import ru.n857l.weatherapp.core.DomainException
+import ru.n857l.weatherapp.core.NoInternetException
 import java.io.Serializable
 
 interface WeatherResult {

@@ -11,7 +11,7 @@ import ru.n857l.weatherapp.core.RunAsync
 import ru.n857l.weatherapp.findcity.domain.FindCityRepository
 import ru.n857l.weatherapp.findcity.domain.FindCityResult
 import ru.n857l.weatherapp.findcity.domain.FoundCity
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
+import ru.n857l.weatherapp.core.NoInternetException
 import ru.n857l.weatherapp.findcity.presentation.FindCityUiMapper
 import ru.n857l.weatherapp.findcity.presentation.FindCityViewModel
 import ru.n857l.weatherapp.findcity.presentation.FoundCityUi

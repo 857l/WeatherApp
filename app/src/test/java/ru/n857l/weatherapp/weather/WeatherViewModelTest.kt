@@ -8,8 +8,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import ru.n857l.weatherapp.core.RunAsync
-import ru.n857l.weatherapp.findcity.domain.NoInternetException
-import ru.n857l.weatherapp.findcity.domain.ServiceUnavailableException
+import ru.n857l.weatherapp.core.NoInternetException
+import ru.n857l.weatherapp.core.ServiceUnavailableException
 import ru.n857l.weatherapp.findcity.presentation.QueryEvent
 import ru.n857l.weatherapp.weather.domain.ForecastData
 import ru.n857l.weatherapp.weather.domain.ForecastResult
