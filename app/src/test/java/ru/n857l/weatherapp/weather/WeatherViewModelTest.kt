@@ -205,11 +205,9 @@ private class FakeRunAsync : RunAsync<QueryEvent> {
         background: suspend (QueryEvent) -> T,
         ui: (T) -> Unit
     ) {
-        // WeatherViewModel это не использует — debounce нужен только поиску города.
     }
 
     override fun emit(value: QueryEvent) {
-        // WeatherViewModel это не использует.
     }
 
     override fun <T : Any> runFlow(

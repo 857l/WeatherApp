@@ -6,7 +6,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import ru.n857l.weatherapp.findcity.data.FindCityDao
+import ru.n857l.weatherapp.findcity.FakeFindCityDao
 import ru.n857l.weatherapp.findcity.data.FindCityEntity
 import ru.n857l.weatherapp.findcity.domain.DomainException
 import ru.n857l.weatherapp.findcity.domain.NoInternetException
@@ -232,18 +232,6 @@ class WeatherRepositoryTest {
         ),
         cityName = "Moscow"
     )
-}
-
-private class FakeFindCityDao : FindCityDao {
-
-    var cityToReturn: FindCityEntity? = null
-    var savedCity: FindCityEntity? = null
-
-    override fun getCity(): FindCityEntity? = cityToReturn
-
-    override suspend fun saveCity(city: FindCityEntity) {
-        savedCity = city
-    }
 }
 
 private class FakeWeatherDao : WeatherDao {
