@@ -185,7 +185,7 @@ interface FoundCityUi : Serializable {
     }
 
     data object ServiceUnavailableError : FoundCityUi {
-        private fun readResolve(): Any = NoConnectionError
+        private fun readResolve(): Any = ServiceUnavailableError
 
         @Composable
         override fun Show(onFoundCityClick: (FoundCity) -> Unit, onRetryClick: () -> Unit) {
