@@ -69,8 +69,8 @@ interface RunAsync<R : Any> {
                         emit(background.invoke(latestQuery))
                     }
                 }
-                .onEach(ui)
                 .flowOn(Dispatchers.IO)
+                .onEach(ui)
                 .launchIn(scope)
         }
 
@@ -84,8 +84,8 @@ interface RunAsync<R : Any> {
             onEach: suspend (T) -> Unit
         ) {
             flow
-                .onEach(onEach)
                 .flowOn(Dispatchers.IO)
+                .onEach(onEach)
                 .launchIn(scope)
         }
     }
