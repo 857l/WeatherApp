@@ -25,9 +25,5 @@
 ## Запуск
 
 1. Получи бесплатный API-ключ на [openweathermap.org](https://home.openweathermap.org/api_keys).
-2. Создай `local.properties` в корне проекта (если его ещё нет) и добавь строку:
-   \`\`\`
-   OWM_API_KEY=твой_ключ_сюда
-   \`\`\`
-   Альтернатива — переменная окружения `OWM_API_KEY` (например, для CI). `local.properties` в `.gitignore`, ключ в репозиторий не попадает.
-3. Собери и запусти как обычный Android-проект (Android Studio или `./gradlew assembleDebug`).
+2. Создай `local.properties` в корне проекта и добавь строку: OWM_API_KEY=твой_ключ_сюда
+3. Собери и запусти как обычный Android-проект
