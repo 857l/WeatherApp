@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -145,7 +146,8 @@ interface WeatherUi : Serializable {
                     text = cityName,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier.testTag("CityName")
                 )
                 Text(
                     text = liveTimeLabel(),
@@ -164,7 +166,8 @@ interface WeatherUi : Serializable {
                     text = temperature,
                     fontSize = 72.sp,
                     fontWeight = FontWeight.Light,
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier.testTag("WeatherTemperature")
                 )
                 Text(
                     text = description,
