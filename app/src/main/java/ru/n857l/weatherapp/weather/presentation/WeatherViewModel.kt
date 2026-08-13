@@ -56,6 +56,11 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
+    fun onResume() {
+        loadWeather()
+        loadForecast()
+    }
+
     private fun scheduleAutoRefresh() {
         runAsync.runFlow(
             scope = viewModelScope,

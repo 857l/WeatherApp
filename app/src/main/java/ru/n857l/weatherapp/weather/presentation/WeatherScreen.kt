@@ -61,6 +61,11 @@ import ru.n857l.weatherapp.ui.theme.SkyTop
 import java.io.Serializable
 import java.util.Date
 import java.util.Locale
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleResumeEffect
 
 @Composable
 fun WeatherScreen(
@@ -73,6 +78,11 @@ fun WeatherScreen(
                 inclusive = true
             }
         }
+    }
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.onResume()
+        onPauseOrDispose { }
     }
 
     val weatherScreenUi = viewModel.state.collectAsStateWithLifecycle()
