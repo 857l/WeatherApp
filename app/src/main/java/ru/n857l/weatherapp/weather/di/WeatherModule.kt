@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import ru.n857l.weatherapp.weather.data.WeatherCloudDataSource
 import ru.n857l.weatherapp.weather.data.WeatherService
@@ -18,7 +18,7 @@ import ru.n857l.weatherapp.weather.presentation.WeatherUi
 import ru.n857l.weatherapp.weather.presentation.WeatherUiMapper
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 class WeatherModule {
 
     @Provides
@@ -27,7 +27,7 @@ class WeatherModule {
 }
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class WeatherBindModule {
 
     @Binds

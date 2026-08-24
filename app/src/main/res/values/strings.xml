@@ -19,4 +19,6 @@
     <string name="unit_pressure">%1$d мм рт. ст.</string>
     <string name="unit_speed">%1$s м/с</string>
     <string name="unit_visibility">%1$d м</string>
+    <string name="weather_notification_channel_name">%1$d м</string>
+    <string name="weather_notification_channel_description">%1$d м</string>
 </resources>

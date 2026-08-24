@@ -1,0 +1,67 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Лучи солнца -->
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M73,38 L77,38" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M69.8,45.8 L72.6,48.6" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M62,49 L62,53" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M54.2,45.8 L51.4,48.6" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M51,38 L47,38" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M54.2,30.2 L51.4,27.4" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M62,27 L62,23" />
+    <path
+        android:strokeColor="#FFFFEE58"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M69.8,30.2 L72.6,27.4" />
+
+    <!-- Диск солнца -->
+    <path
+        android:fillColor="#FFFFEE58"
+        android:pathData="M70,38 A8,8 0 1,0 54,38 A8,8 0 1,0 70,38" />
+
+    <!-- Облако (перекрывает нижнюю часть солнца) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M48,56 A10,10 0 1,0 28,56 A10,10 0 1,0 48,56" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M67,48 A13,13 0 1,0 41,48 A13,13 0 1,0 67,48" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M79,56 A9,9 0 1,0 61,56 A9,9 0 1,0 79,56" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M36,58 L72,58 A8,8 0 0 1 80,66 A8,8 0 0 1 72,74 L36,74 A8,8 0 0 1 28,66 A8,8 0 0 1 36,58 Z" />
+</vector>
