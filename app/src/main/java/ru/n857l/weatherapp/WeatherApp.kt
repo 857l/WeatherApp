@@ -2,6 +2,9 @@ package ru.n857l.weatherapp
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import ru.n857l.weatherapp.notification.WeatherNotificationScheduler
@@ -26,5 +29,12 @@ class WeatherApp : Application(), Configuration.Provider {
         super.onCreate()
         notifier.createChannel()
         WeatherNotificationScheduler.schedule(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onStop(owner: LifecycleOwner) {
+                    WeatherNotificationScheduler.refreshNow(this@WeatherApp)
+                }
+            }
+        )
     }
 }
