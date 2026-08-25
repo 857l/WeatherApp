@@ -32,7 +32,7 @@ class WeatherUiMapper @Inject constructor(
         return WeatherUi.Base(
             cityName = weatherInCity.cityName,
             iconUrl = weatherIconUrl(weatherInCity.icon, size = 4),
-            description = weatherInCity.description.replaceFirstChar { it.uppercase() },
+            description = weatherInCity.description.capitalizedWeatherDescription(),
             temperature = "${weatherInCity.temperature.roundToInt()}°",
             feelsTemperature = "${weatherInCity.feelsTemperature.roundToInt()}°",
             minMaxTemperature = "↑${weatherInCity.tempMin.roundToInt()}° / ↓${weatherInCity.tempMax.roundToInt()}°",

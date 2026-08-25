@@ -57,8 +57,8 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun onResume() {
-        loadWeather()
-        loadForecast()
+        refreshWeatherSilently()
+        refreshForecastSilently()
     }
 
     private fun scheduleAutoRefresh() {

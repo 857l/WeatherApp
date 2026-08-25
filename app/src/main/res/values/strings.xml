@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="weather_widget_name">Погода</string>
     <string name="city_name">City Name</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="service_unavailable">Service Unavailable</string>
