@@ -132,10 +132,10 @@ class WeatherRepositoryTest {
         val stillAheadToday = anIncludedTodayHour()
         cloudDataSource.forecastToReturn = ForecastCloud(
             list = listOf(
-                forecastItem(todayAt(hour = 5)),      // сегодня до 6 утра — не должно попасть
-                forecastItem(stillAheadToday),        // сегодня, ещё впереди — должно попасть
-                forecastItem(tomorrowAt(hour = 6)),   // завтра ровно в 6 — граница, должно попасть
-                forecastItem(tomorrowAt(hour = 7))    // завтра позже 6 утра — не должно попасть
+                forecastItem(todayAt(hour = 5)),      // Before 6 AM today: excluded.
+                forecastItem(stillAheadToday),        // Still ahead today: included.
+                forecastItem(tomorrowAt(hour = 6)),   // Exactly 6 AM tomorrow: included boundary.
+                forecastItem(tomorrowAt(hour = 7))    // After 6 AM tomorrow: excluded.
             ),
             city = ForecastCity(name = "Moscow")
         )
@@ -194,7 +194,7 @@ class WeatherRepositoryTest {
         dateTimeText = ""
     )
 
-    // Возвращает "сегодня в hour:00" в секундах — так же, как это отдаёт OpenWeatherMap.
+    // Returns today at hour:00 in seconds, matching the OpenWeatherMap response format.
     private fun todayAt(hour: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -204,7 +204,7 @@ class WeatherRepositoryTest {
         return calendar.timeInMillis / 1000
     }
 
-    // То же самое, но на день вперёд.
+    // Returns the same time one day later.
     private fun tomorrowAt(hour: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, 1)

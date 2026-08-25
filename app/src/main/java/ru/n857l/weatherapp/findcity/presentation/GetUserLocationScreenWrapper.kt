@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -19,6 +20,7 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.Task
+import ru.n857l.weatherapp.R
 
 @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
 @Composable
@@ -27,6 +29,9 @@ fun GetUserLocationScreenWrapper(
     onFailed: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val locationFailed = stringResource(R.string.location_failed)
+    val locationPermissionDenied = stringResource(R.string.location_permission_denied)
+    val locationDisabled = stringResource(R.string.location_disabled)
     val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
     val locationRequest =
@@ -57,10 +62,10 @@ fun GetUserLocationScreenWrapper(
             )
                 .addOnSuccessListener {}
                 .addOnFailureListener { e ->
-                    onFailed.invoke(e.message ?: "failed to get location")
+                    onFailed.invoke(e.message ?: locationFailed)
                 }
         } else {
-            onFailed.invoke("Permission denied")
+            onFailed.invoke(locationPermissionDenied)
         }
     }
     isLocationEnabled(locationRequest, context) {
@@ -84,7 +89,7 @@ fun GetUserLocationScreenWrapper(
                     )
                         .addOnSuccessListener {}
                         .addOnFailureListener { e ->
-                            onFailed.invoke(e.message ?: "failed to get location!")
+                            onFailed.invoke(e.message ?: locationFailed)
                         }
                 }
             } else
@@ -95,7 +100,7 @@ fun GetUserLocationScreenWrapper(
                     )
                 )
         } else {
-            onFailed.invoke("Location is not enabled!")
+            onFailed.invoke(locationDisabled)
         }
     }
 }

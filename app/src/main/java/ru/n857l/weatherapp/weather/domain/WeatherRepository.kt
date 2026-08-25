@@ -19,10 +19,10 @@ import java.util.TimeZone
 import javax.inject.Inject
 import kotlin.math.abs
 
-private val localDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+private val localDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).apply {
     timeZone = TimeZone.getDefault()
 }
-private val localHourFormat = SimpleDateFormat("HH", Locale.getDefault()).apply {
+private val localHourFormat = SimpleDateFormat("HH", Locale.ENGLISH).apply {
     timeZone = TimeZone.getDefault()
 }
 

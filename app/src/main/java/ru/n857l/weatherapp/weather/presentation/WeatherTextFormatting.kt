@@ -4,5 +4,5 @@ import java.util.Locale
 
 fun String.capitalizedWeatherDescription(): String =
     trim().replaceFirstChar { char ->
-        if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
+        if (char.isLowerCase()) char.titlecase(Locale.ENGLISH) else char.toString()
     }

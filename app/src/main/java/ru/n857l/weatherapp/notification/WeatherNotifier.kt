@@ -52,7 +52,9 @@ class WeatherNotifier @Inject constructor(
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(temperatureIcon(temperature))
-            .setContentTitle("$cityName, $temperature")
+            .setContentTitle(
+                context.getString(R.string.weather_notification_title, cityName, temperature)
+            )
             .setContentText(description)
             .setContentIntent(pendingIntent)
             .setOngoing(true)

@@ -33,9 +33,17 @@ class WeatherUiMapper @Inject constructor(
             cityName = weatherInCity.cityName,
             iconUrl = weatherIconUrl(weatherInCity.icon, size = 4),
             description = weatherInCity.description.capitalizedWeatherDescription(),
-            temperature = "${weatherInCity.temperature.roundToInt()}°",
-            feelsTemperature = "${weatherInCity.feelsTemperature.roundToInt()}°",
-            minMaxTemperature = "↑${weatherInCity.tempMin.roundToInt()}° / ↓${weatherInCity.tempMax.roundToInt()}°",
+            temperature = resourceProvider.getString(
+                R.string.unit_temperature, weatherInCity.temperature.roundToInt()
+            ),
+            feelsTemperature = resourceProvider.getString(
+                R.string.unit_temperature, weatherInCity.feelsTemperature.roundToInt()
+            ),
+            minMaxTemperature = resourceProvider.getString(
+                R.string.unit_min_max_temperature,
+                weatherInCity.tempMin.roundToInt(),
+                weatherInCity.tempMax.roundToInt()
+            ),
             pressure = resourceProvider.getString(
                 R.string.unit_pressure, weatherInCity.pressure.hPaToMmHg()
             ),
@@ -45,11 +53,11 @@ class WeatherUiMapper @Inject constructor(
             groundLevelPressure = resourceProvider.getString(
                 R.string.unit_pressure, weatherInCity.groundLevelPressure.hPaToMmHg()
             ),
-            humidity = "${weatherInCity.humidity}%",
+            humidity = resourceProvider.getString(R.string.unit_percent, weatherInCity.humidity),
             speed = resourceProvider.getString(R.string.unit_speed, weatherInCity.speed),
-            degree = "${weatherInCity.degree}°",
+            degree = resourceProvider.getString(R.string.unit_degree, weatherInCity.degree),
             gust = resourceProvider.getString(R.string.unit_speed, weatherInCity.gust),
-            clouds = "${weatherInCity.clouds}%",
+            clouds = resourceProvider.getString(R.string.unit_percent, weatherInCity.clouds),
             visibility = resourceProvider.getString(R.string.unit_visibility, weatherInCity.visibility),
             sunrise = timeWrapper.getShortTime(weatherInCity.sunrise),
             sunset = timeWrapper.getShortTime(weatherInCity.sunset),
@@ -71,7 +79,7 @@ interface TimeWrapper {
     ) : TimeWrapper {
 
         override fun getShortTime(timeMillis: Long): String {
-            val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
             dateFormat.timeZone = TimeZone.getDefault()
             return dateFormat.format(Date(timeMillis))
         }
@@ -81,7 +89,7 @@ interface TimeWrapper {
         }
 
         override fun getDayLabel(timeMillis: Long): String {
-            val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.ENGLISH)
             dateFormat.timeZone = TimeZone.getDefault()
             return dateFormat.format(Date(timeMillis))
         }

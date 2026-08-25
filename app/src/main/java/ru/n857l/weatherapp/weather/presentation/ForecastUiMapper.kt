@@ -1,5 +1,7 @@
 package ru.n857l.weatherapp.weather.presentation
 
+import ru.n857l.weatherapp.R
+import ru.n857l.weatherapp.core.ResourceProvider
 import ru.n857l.weatherapp.weather.domain.ForecastData
 import ru.n857l.weatherapp.weather.domain.ForecastDay
 import ru.n857l.weatherapp.weather.domain.ForecastHour
@@ -8,7 +10,8 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class ForecastUiMapper @Inject constructor(
-    private val timeWrapper: TimeWrapper
+    private val timeWrapper: TimeWrapper,
+    private val resourceProvider: ResourceProvider
 ) : ForecastResult.Mapper<ForecastUi> {
 
     override fun mapEmpty(): ForecastUi = ForecastUi.Empty
@@ -27,14 +30,14 @@ class ForecastUiMapper @Inject constructor(
     private fun ForecastDay.toForecastDayUi(): ForecastDayUi = ForecastDayUi(
         dayLabel = timeWrapper.getDayLabel(date),
         iconUrl = weatherIconUrl(icon),
-        tempMin = "${tempMin.roundToInt()}°",
-        tempMax = "${tempMax.roundToInt()}°"
+        tempMin = resourceProvider.getString(R.string.unit_temperature, tempMin.roundToInt()),
+        tempMax = resourceProvider.getString(R.string.unit_temperature, tempMax.roundToInt())
     )
 
     private fun ForecastHour.toHourUi(): HourUi = HourUi(
         time = timeWrapper.getShortTime(dateTime),
         iconUrl = weatherIconUrl(icon),
-        temp = "${temperature.roundToInt()}°",
+        temp = resourceProvider.getString(R.string.unit_temperature, temperature.roundToInt()),
         tempValue = temperature
     )
 }

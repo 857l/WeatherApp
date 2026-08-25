@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    <string name="weather_widget_name">Погода</string>
+    <string name="weather_widget_name">Weather</string>
     <string name="city_name">City Name</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="service_unavailable">Service Unavailable</string>
@@ -17,9 +17,23 @@
     <string name="detail_sunrise">Sunrise</string>
     <string name="detail_sunset">Sunset</string>
     <string name="find_city_title">Find your city</string>
-    <string name="unit_pressure">%1$d мм рт. ст.</string>
-    <string name="unit_speed">%1$s м/с</string>
-    <string name="unit_visibility">%1$d м</string>
-    <string name="weather_notification_channel_name">%1$d м</string>
-    <string name="weather_notification_channel_description">%1$d м</string>
+    <string name="unit_temperature">%1$s°</string>
+    <string name="unit_min_max_temperature">↑%1$d° / ↓%2$d°</string>
+    <string name="unit_percent">%1$d%%</string>
+    <string name="unit_degree">%1$d°</string>
+    <string name="unit_pressure">%1$d mmHg</string>
+    <string name="unit_speed">%1$s m/s</string>
+    <string name="unit_visibility">%1$d m</string>
+    <string name="detail_wind_value">%1$s, %2$s</string>
+    <string name="weather_notification_channel_name">Weather updates</string>
+    <string name="weather_notification_channel_description">Current weather notifications</string>
+    <string name="weather_notification_title">%1$s, %2$s</string>
+    <string name="widget_until">until %1$s</string>
+    <string name="widget_hourly_forecast_loading">Hourly forecast is loading</string>
+    <string name="widget_title">WEATHER</string>
+    <string name="widget_choose_city">Choose a city</string>
+    <string name="widget_open_app">Tap to open the app</string>
+    <string name="location_failed">Failed to get location</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="location_disabled">Location is disabled</string>
 </resources>

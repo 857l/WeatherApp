@@ -60,7 +60,7 @@ class ScenarioTest {
         )
         val weatherViewModel = WeatherViewModel(
             mapper = WeatherUiMapper(timeWrapper, resourceProvider),
-            forecastMapper = ForecastUiMapper(timeWrapper),
+            forecastMapper = ForecastUiMapper(timeWrapper, resourceProvider),
             savedStateHandle = SavedStateHandle(),
             repository = weatherRepository,
             runAsync = runAsync

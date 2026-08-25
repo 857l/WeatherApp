@@ -12,6 +12,7 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
@@ -45,6 +46,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import ru.n857l.weatherapp.MainActivity
+import ru.n857l.weatherapp.R
 import ru.n857l.weatherapp.weather.data.ForecastDao
 import ru.n857l.weatherapp.weather.data.WeatherDao
 import ru.n857l.weatherapp.weather.domain.ForecastHour
@@ -177,12 +179,16 @@ private fun CurrentWeather(
     icon: Bitmap?,
     validUntil: String?
 ) {
+    val context = LocalContext.current
     Row(
         modifier = GlanceModifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "${weather.temperature.roundToInt().temperature()}°",
+            text = context.getString(
+                R.string.unit_temperature,
+                weather.temperature.roundToInt().temperature()
+            ),
             style = TextStyle(
                 color = PrimaryText,
                 fontSize = 48.sp,
@@ -208,7 +214,7 @@ private fun CurrentWeather(
             )
             if (validUntil != null) {
                 Text(
-                    text = "до $validUntil",
+                    text = context.getString(R.string.widget_until, validUntil),
                     style = TextStyle(color = SecondaryText, fontSize = 14.sp)
                 )
             }
@@ -222,9 +228,10 @@ private fun HourlyForecast(
     icons: Map<String, Bitmap?>,
     timeWrapper: TimeWrapper
 ) {
+    val context = LocalContext.current
     if (hours.isEmpty()) {
         Text(
-            text = "Почасовой прогноз загружается",
+            text = context.getString(R.string.widget_hourly_forecast_loading),
             style = TextStyle(color = SecondaryText, fontSize = 13.sp)
         )
         return
@@ -253,6 +260,7 @@ private fun HourForecastItem(
     time: String,
     modifier: GlanceModifier
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -274,7 +282,10 @@ private fun HourForecastItem(
         )
         Spacer(GlanceModifier.height(1.dp))
         Text(
-            text = "${hour.temperature.roundToInt().temperature()}°",
+            text = context.getString(
+                R.string.unit_temperature,
+                hour.temperature.roundToInt().temperature()
+            ),
             style = TextStyle(
                 color = PrimaryText,
                 fontSize = 14.sp,
@@ -304,8 +315,9 @@ private fun WeatherImage(
 
 @Composable
 private fun EmptyContent() {
+    val context = LocalContext.current
     Text(
-        text = "ПОГОДА",
+        text = context.getString(R.string.widget_title),
         style = TextStyle(
             color = SecondaryText,
             fontSize = 13.sp,
@@ -314,7 +326,7 @@ private fun EmptyContent() {
     )
     Spacer(GlanceModifier.height(18.dp))
     Text(
-        text = "Выберите город",
+        text = context.getString(R.string.widget_choose_city),
         style = TextStyle(
             color = PrimaryText,
             fontSize = 25.sp,
@@ -323,7 +335,7 @@ private fun EmptyContent() {
     )
     Spacer(GlanceModifier.height(6.dp))
     Text(
-        text = "Нажмите, чтобы открыть приложение",
+        text = context.getString(R.string.widget_open_app),
         style = TextStyle(color = SecondaryText, fontSize = 14.sp)
     )
 }
@@ -332,9 +344,9 @@ private fun List<ForecastHour>.weatherChangeTime(
     weather: WeatherInCity,
     timeWrapper: TimeWrapper
 ): String? {
-    val currentDescription = weather.description.trim().lowercase(Locale.getDefault())
+    val currentDescription = weather.description.trim().lowercase(Locale.ENGLISH)
     return firstOrNull { hour ->
-        hour.description.trim().lowercase(Locale.getDefault()) != currentDescription
+        hour.description.trim().lowercase(Locale.ENGLISH) != currentDescription
     }?.dateTime?.let(timeWrapper::getShortTime)
 }
 

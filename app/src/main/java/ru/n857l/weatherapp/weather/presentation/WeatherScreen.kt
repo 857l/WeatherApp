@@ -200,7 +200,11 @@ interface WeatherUi : Serializable {
                     val details = listOf(
                         DetailItemData(Icons.Filled.Thermostat, R.string.detail_feels_like, feelsTemperature),
                         DetailItemData(Icons.Filled.WaterDrop, R.string.detail_humidity, humidity),
-                        DetailItemData(Icons.Filled.Air, R.string.detail_wind, "$speed, $degree"),
+                        DetailItemData(
+                            Icons.Filled.Air,
+                            R.string.detail_wind,
+                            stringResource(R.string.detail_wind_value, speed, degree)
+                        ),
                         DetailItemData(Icons.Filled.Compress, R.string.detail_pressure, pressure),
                         DetailItemData(Icons.Filled.Air, R.string.detail_gust, gust),
                         DetailItemData(Icons.Filled.Cloud, R.string.detail_clouds, clouds),
@@ -317,7 +321,7 @@ private fun liveTimeLabel(): String {
 }
 
 private fun formatCurrentTime(): String {
-    val dateFormat = SimpleDateFormat("HH:mm d MMM yyyy", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("HH:mm d MMM yyyy", Locale.ENGLISH)
     dateFormat.timeZone = TimeZone.getDefault()
     return dateFormat.format(Date())
 }
@@ -329,18 +333,18 @@ fun PreviewWeatherScreenUi() {
         weatherUi = WeatherUi.Base(
             cityName = "Moscow",
             iconUrl = "https://openweathermap.org/img/wn/01d@4x.png",
-            description = "Ясно",
+            description = "Clear sky",
             temperature = "12°",
             feelsTemperature = "11°",
-            pressure = "745 мм рт. ст.",
+            pressure = "745 mmHg",
             humidity = "60%",
-            seaLevelPressure = "745 мм рт. ст.",
-            groundLevelPressure = "740 мм рт. ст.",
-            speed = "3.1",
+            seaLevelPressure = "745 mmHg",
+            groundLevelPressure = "740 mmHg",
+            speed = "3.1 m/s",
             degree = "180°",
-            gust = "5.2",
-            clouds = "12",
-            visibility = "10000 м",
+            gust = "5.2 m/s",
+            clouds = "12%",
+            visibility = "10000 m",
             minMaxTemperature = "↑14° / ↓9°",
             dateTime = System.currentTimeMillis(),
             sunrise = "05:12",
@@ -356,9 +360,9 @@ fun PreviewWeatherScreenUi() {
                 HourUi("21:00", "https://openweathermap.org/img/wn/01n@2x.png", "15°", 15f)
             ),
             days = listOf(
-                ForecastDayUi("Пн, 5 авг", "https://openweathermap.org/img/wn/01d@2x.png", "9°", "14°"),
-                ForecastDayUi("Вт, 6 авг", "https://openweathermap.org/img/wn/02d@2x.png", "10°", "16°"),
-                ForecastDayUi("Ср, 7 авг", "https://openweathermap.org/img/wn/10d@2x.png", "8°", "12°")
+                ForecastDayUi("Mon, 5 Aug", "https://openweathermap.org/img/wn/01d@2x.png", "9°", "14°"),
+                ForecastDayUi("Tue, 6 Aug", "https://openweathermap.org/img/wn/02d@2x.png", "10°", "16°"),
+                ForecastDayUi("Wed, 7 Aug", "https://openweathermap.org/img/wn/10d@2x.png", "8°", "12°")
             )
         ),
         onRetryClick = {}

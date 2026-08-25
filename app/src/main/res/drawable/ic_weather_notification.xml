@@ -4,7 +4,7 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Лучи солнца -->
+    <!-- Sun rays -->
     <path
         android:strokeColor="#FFFFEE58"
         android:strokeWidth="4"
@@ -46,12 +46,12 @@
         android:strokeLineCap="round"
         android:pathData="M69.8,30.2 L72.6,27.4" />
 
-    <!-- Диск солнца -->
+    <!-- Sun disk -->
     <path
         android:fillColor="#FFFFEE58"
         android:pathData="M70,38 A8,8 0 1,0 54,38 A8,8 0 1,0 70,38" />
 
-    <!-- Облако (перекрывает нижнюю часть солнца) -->
+    <!-- Cloud overlapping the lower part of the sun -->
     <path
         android:fillColor="#FFFFFFFF"
         android:pathData="M48,56 A10,10 0 1,0 28,56 A10,10 0 1,0 48,56" />
